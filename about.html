@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About QRVolt — a fast, private, client-side QR code generator built for businesses and creators. No uploads, no tracking, no server round-trips.">
+<title>About — QRVolt</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%238b5cf6%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%233b82f6%27/%3E%3Cstop offset=%271%27 stop-color=%27%2322d3ee%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x=%272%27 y=%272%27 width=%2728%27 height=%2728%27 rx=%277%27 fill=%27%23050d1a%27/%3E%3Cpath d=%27M18 4 L9 18 H15 L13 28 L24 13 H17 Z%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#050d1a;--bg2:#081326;--panel:rgba(18,28,48,.55);--panel-border:rgba(140,160,255,.14);
+  --text:#e9edf7;--sub:#93a2c2;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#22d3ee;
+  --grad:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));--radius:16px;
+}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}
+body{min-height:100vh;background:radial-gradient(circle at 15% 0%,rgba(139,92,246,.16),transparent 45%),radial-gradient(circle at 85% 10%,rgba(34,211,238,.14),transparent 45%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+.wrap{max-width:860px;margin:0 auto;padding:40px 20px 80px;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(139,92,246,.5);}
+.brand-mark svg{width:20px;height:20px;}
+h1{font-size:24px;margin:0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+h2{font-size:18px;margin:30px 0 8px;color:var(--text);}
+p,li{color:var(--sub);font-size:14.5px;}
+a{color:var(--cyan);}
+.card{background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius);padding:22px 24px;margin-top:18px;backdrop-filter:blur(12px);}
+.feat{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:12px;}
+.feat div{background:rgba(255,255,255,.03);border:1px solid var(--panel-border);border-radius:10px;padding:12px;font-size:13.5px;color:var(--sub);}
+.nav{margin-top:18px;display:flex;gap:16px;flex-wrap:wrap;}
+.nav a{color:var(--sub);text-decoration:none;font-size:13px;}
+.nav a:hover{color:var(--cyan);}
+footer{text-align:center;color:#4c597a;font-size:12px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="white"><path d="M13 2 L4 14h6l-1 8 9-12h-6z"/></svg></div>
+    <h1>QRVolt</h1>
+  </div>
+  <div class="card">
+    <h2>About QRVolt</h2>
+    <p>
+      QRVolt is a free, fast, and private QR code generator. Everything runs directly in your
+      browser — no uploads, no tracking of your content, no server round-trips. Type a URL, Wi-Fi
+      credential, contact card, or any text, style it the way you like, and export it as PNG, JPG,
+      WebP, SVG, or PDF.
+    </p>
+
+    <h2>Why people use QRVolt</h2>
+    <div class="feat">
+      <div><strong>100% offline.</strong> Your data never leaves the device.</div>
+      <div><strong>Many formats.</strong> PNG, JPG, WebP, SVG, PDF, and print.</div>
+      <div><strong>Rich design.</strong> Gradients, palettes, logos, and multiple module shapes.</div>
+      <div><strong>Flexible content.</strong> URL, text, Wi-Fi, email, vCard, SMS, calls, geo, events.</div>
+      <div><strong>Instant preview.</strong> Live canvas with scan-verification hints.</div>
+      <div><strong>No sign-up.</strong> Just open and generate.</div>
+    </div>
+
+    <h2>How it works</h2>
+    <p>
+      QRVolt includes a self-contained implementation of the QR code standard (ISO/IEC 18004).
+      When you enter content, it is encoded into a matrix in your browser and rendered to a canvas
+      or SVG you can download. Saved designs and history are stored only in your local browser.
+    </p>
+
+    <h2>Contact</h2>
+    <p>We’d love to hear from you — reach us at <a href="mailto:hello@qrvolt.online">hello@qrvolt.online</a>.</p>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">← Back to QRVolt</a>
+    <a href="guide.html">Guide &amp; FAQ</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+    <a href="blog.html">Blog</a>
+      <a href="wifi.html">Wi-Fi QR</a>
+      <a href="logo.html">QR with logo</a>
+      <a href="vcard.html">Business card QR</a>
+    <a href="updates.html">Updates</a>
+  </div>
+
+  <footer>QRVolt — 100% offline QR generation.</footer>
+</div>
+</body>
+</html>

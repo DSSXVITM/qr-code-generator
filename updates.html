@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Updates — QRVolt</title>
+<meta name="description" content="What’s new in QRVolt: scan &amp; read QR, new content types (PDF, App, Multi-URL, Social, WhatsApp, PayPal, crypto), captions, branding, higher resolution and more export formats.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%238b5cf6%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%233b82f6%27/%3E%3Cstop offset=%271%27 stop-color=%27%2322d3ee%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x=%272%27 y=%272%27 width=%2728%27 height=%2728%27 rx=%277%27 fill=%27%23050d1a%27/%3E%3Cpath d=%27M18 4 L9 18 H15 L13 28 L24 13 H17 Z%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#050d1a;--bg2:#081326;--panel:rgba(18,28,48,.55);--panel-border:rgba(140,160,255,.14);
+  --text:#e9edf7;--sub:#93a2c2;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#22d3ee;
+  --grad:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));--radius:16px;
+}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}
+body{min-height:100vh;background:radial-gradient(circle at 15% 0%,rgba(139,92,246,.16),transparent 45%),radial-gradient(circle at 85% 10%,rgba(34,211,238,.14),transparent 45%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.65;}
+.wrap{max-width:860px;margin:0 auto;padding:40px 20px 80px;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(139,92,246,.5);}
+.brand-mark svg{width:20px;height:20px;}
+h1{font-size:24px;margin:0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+h2{font-size:18px;margin:30px 0 8px;color:var(--text);}
+p,li{color:var(--sub);font-size:14.5px;}
+a{color:var(--cyan);}
+.card{background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius);padding:22px 24px;margin-top:18px;backdrop-filter:blur(12px);}
+.release{border-left:3px solid var(--blue);padding:4px 0 4px 16px;margin-top:18px;}
+.release .date{color:var(--cyan);font-size:13px;font-weight:600;}
+.release h2{margin:4px 0 8px;}
+ul{padding-left:20px;}
+.nav{margin-top:18px;display:flex;gap:16px;flex-wrap:wrap;}
+.nav a{color:var(--sub);text-decoration:none;font-size:13px;}
+.nav a:hover{color:var(--cyan);}
+footer{text-align:center;color:#4c597a;font-size:12px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="white"><path d="M13 2 L4 14h6l-1 8 9-12h-6z"/></svg></div>
+    <h1>QRVolt Updates</h1>
+  </div>
+  <div class="card">
+    <p>A running log of what we’ve added to QRVolt. Everything runs 100% in your browser — no account, no uploads.</p>
+
+    <div class="release">
+      <div class="date">Latest</div>
+      <h2>Install it. Share it. Print it right.</h2>
+      <ul>
+        <li><b>Installable app (PWA)</b> — add QRVolt to your home screen / desktop and it keeps working with zero internet, thanks to a built-in service worker.</li>
+        <li><b>Share design as a link</b> — the new “Share design” button packs your entire design into the URL, so a colleague can open and tweak the exact same QR.</li>
+        <li><b>Caption styles</b> — render your label as plain text or as a “SCAN ME” pill button baked into the image.</li>
+        <li><b>Print-size hint</b> — a badge now shows the minimum recommended physical size for reliable scanning.</li>
+        <li><b>Ctrl/Cmd + S</b> downloads your QR as PNG instantly.</li>
+        <li><b>ZIP batch export</b> — Multi-URL and Social batches can be downloaded as one .zip archive of PNGs.</li>
+      </ul>
+    </div>
+
+    <div class="release">
+      <div class="date">Previously</div>
+      <h2>Scan &amp; read QR codes</h2>
+      <ul>
+        <li><b>Scan &amp; Read QR</b> — upload a screenshot/photo or use your camera to decode any QR, then copy the text, open the link, or load it back into the generator.</li>
+        <li><b>New content types:</b> WhatsApp, PayPal, Crypto (BTC/ETH/LTC/DOGE/DASH), <b>PDF</b> (link to a PDF), <b>App</b> (Google Play / App Store), <b>Multi-URL</b> and <b>Social</b> batch generators that create a separate QR for each link.</li>
+      </ul>
+    </div>
+
+    <div class="release">
+      <div class="date">Design &amp; branding</div>
+      <h2>Make it yours</h2>
+      <ul>
+        <li><b>Caption</b> — add text above or below the code (great for print).</li>
+        <li><b>QRVolt logo on top</b> of the QR, plus a center logo enabled by default.</li>
+        <li><b>Module shapes:</b> Square, Rounded, Dots, Classy, Bars, Diamond.</li>
+        <li><b>3-stop gradients</b> (linear/radial) and 8 colour palettes.</li>
+        <li><b>Quiet-zone slider</b> and a full <b>Reset all</b> button.</li>
+      </ul>
+    </div>
+
+    <div class="release">
+      <div class="date">Export &amp; quality</div>
+      <h2>Sharper, more formats</h2>
+      <ul>
+        <li>Resolution up to <b>2048 px</b> and <b>8×</b> PNG scale.</li>
+        <li>Formats: <b>PNG, JPG, WebP, SVG, PDF, Print, Copy</b> to clipboard.</li>
+        <li>Scan-verification hint so the code you save is the code that scans.</li>
+      </ul>
+    </div>
+
+    <div class="release">
+      <div class="date">Trust &amp; compliance</div>
+      <h2>AdSense-ready</h2>
+      <ul>
+        <li>Full legal &amp; info set: <a href="privacy.html">Privacy</a>, <a href="terms.html">Terms</a>, <a href="about.html">About</a>, <a href="guide.html">Guide</a>, <a href="contact.html">Contact</a> and this <a href="updates.html">Updates</a> page.</li>
+        <li>Cookie consent banner with Google AdSense / DoubleClick disclosure (ads load only after consent).</li>
+        <li><a href="robots.txt">robots.txt</a> + <a href="sitemap.xml">sitemap.xml</a>, meta descriptions on every page, and a <a href="blog.html">Blog</a>
+      <a href="wifi.html">Wi-Fi QR</a>
+      <a href="logo.html">QR with logo</a>
+      <a href="vcard.html">Business card QR</a> article.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">← Back to QRVolt</a>
+    <a href="guide.html">Guide &amp; FAQ</a>
+    <a href="about.html">About</a>
+    <a href="blog.html">Blog</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <footer>QRVolt — 100% offline QR generation.</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How to create a QR code: the complete QRVolt guide covering QR types, error correction, branding, scanning and best practices for better scans.">
+<title>Guide &amp; FAQ — QRVolt</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%238b5cf6%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%233b82f6%27/%3E%3Cstop offset=%271%27 stop-color=%27%2322d3ee%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x=%272%27 y=%272%27 width=%2728%27 height=%2728%27 rx=%277%27 fill=%27%23050d1a%27/%3E%3Cpath d=%27M18 4 L9 18 H15 L13 28 L24 13 H17 Z%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#050d1a;--bg2:#081326;--panel:rgba(18,28,48,.55);--panel-border:rgba(140,160,255,.14);
+  --text:#e9edf7;--sub:#93a2c2;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#22d3ee;
+  --grad:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));--radius:16px;
+}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}
+body{min-height:100vh;background:radial-gradient(circle at 15% 0%,rgba(139,92,246,.16),transparent 45%),radial-gradient(circle at 85% 10%,rgba(34,211,238,.14),transparent 45%),linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.7;}
+.wrap{max-width:880px;margin:0 auto;padding:40px 20px 80px;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(139,92,246,.5);}
+.brand-mark svg{width:20px;height:20px;}
+h1{font-size:26px;margin:0;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+h2{font-size:20px;margin:34px 0 10px;color:var(--text);}
+h3{font-size:15.5px;margin:18px 0 6px;color:var(--cyan);}
+p,li{color:var(--sub);font-size:14.5px;}
+a{color:var(--cyan);}
+.card{background:var(--panel);border:1px solid var(--panel-border);border-radius:var(--radius);padding:24px 26px;margin-top:18px;backdrop-filter:blur(12px);}
+.q{background:rgba(255,255,255,.03);border:1px solid var(--panel-border);border-left:3px solid var(--cyan);border-radius:10px;padding:12px 16px;margin-top:12px;}
+.q b{color:var(--text);}
+.nav{margin-top:18px;display:flex;gap:16px;flex-wrap:wrap;}
+.nav a{color:var(--sub);text-decoration:none;font-size:13px;}
+.nav a:hover{color:var(--cyan);}
+footer{text-align:center;color:#4c597a;font-size:12px;margin-top:30px;}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Is my data uploaded when I make a QR code?","acceptedAnswer":{"@type":"Answer","text":"No. QRVolt runs entirely in your browser; nothing is sent to a server."}},
+    {"@type":"Question","name":"Why is my QR code not scanning?","acceptedAnswer":{"@type":"Answer","text":"Use error correction H, keep a clear quiet zone, ensure high contrast, and verify the scan in QRVolt before downloading."}},
+    {"@type":"Question","name":"Can I use generated QR codes commercially?","acceptedAnswer":{"@type":"Answer","text":"Yes. Codes you generate are yours to use, as long as the linked content follows the law and our Terms."}}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-mark"><svg viewBox="0 0 24 24" fill="white"><path d="M13 2 L4 14h6l-1 8 9-12h-6z"/></svg></div>
+    <h1>QRVolt — Guide &amp; FAQ</h1>
+  </div>
+
+  <div class="card">
+    <h2>What is a QR code?</h2>
+    <p>
+      A QR code (Quick Response code) is a two-dimensional barcode that stores information in a grid
+      of black and white squares. Unlike a traditional barcode, a QR code can hold much more data and
+      can be scanned from any direction using a smartphone camera. When scanned, it can open a website,
+      connect to Wi-Fi, add a contact, send a message, or perform many other actions instantly.
+    </p>
+
+    <h2>How QRVolt works</h2>
+    <p>
+      QRVolt generates QR codes <strong>entirely inside your browser</strong>. The text or link you
+      enter is encoded on your device and turned into a downloadable image. Nothing is uploaded to a
+      server, which means your data stays private. You can export the result as PNG, JPG, WebP, SVG,
+      or PDF, copy it to the clipboard, or print it.
+    </p>
+
+    <h2>What can you create with QRVolt?</h2>
+    <h3>URL</h3>
+    <p>Turn any website link into a scannable code. If you omit “https://”, QRVolt adds it automatically.</p>
+    <h3>Text</h3>
+    <p>Encode a plain message, note, or quote.</p>
+    <h3>Wi-Fi</h3>
+    <p>Let guests join your network by scanning — no need to type the password.</p>
+    <h3>Email</h3>
+    <p>Pre-fill a recipient, subject, and body so scanning opens a ready-to-send email.</p>
+    <h3>vCard</h3>
+    <p>Share your contact details so others can save them to their phone in one tap.</p>
+    <h3>SMS &amp; Call</h3>
+    <p>Start a text message or open the dialer with a single scan.</p>
+    <h3>Geo &amp; Event</h3>
+    <p>Point to a location on the map, or add a calendar event with date, time, and place.</p>
+
+    <h2>How to scan a QR code</h2>
+    <p>
+      Open your phone’s camera (or a QR scanner app), point it at the code, and tap the notification
+      that appears. Most modern phones scan QR codes natively without extra software.
+    </p>
+
+    <h2>Design tips for scannable codes</h2>
+    <ul>
+      <li><strong>Keep contrast high.</strong> Dark modules on a light background scan most reliably.</li>
+      <li><strong>Use Error Correction H</strong> when placing a logo, so the code survives partial damage.</li>
+      <li><strong>Don’t remove the quiet zone.</strong> The margin around the code helps scanners detect it.</li>
+      <li><strong>Test before printing.</strong> Always scan your code on a real phone at the size you’ll use.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+
+    <div class="q"><b>Is QRVolt free?</b><br>Yes. The generator is completely free to use, with no account required.</div>
+    <div class="q"><b>Is my data private?</b><br>All generation happens on your device. Your content is never sent to our servers.</div>
+    <div class="q"><b>Which file formats are supported?</b><br>PNG, JPG, WebP, SVG, and PDF, plus copy-to-clipboard and print.</div>
+    <div class="q"><b>Can I add my logo?</b><br>Yes. Upload an image or use the built-in mark, and we recommend Error Correction level H.</div>
+    <div class="q"><b>Why won’t my code scan?</b><br>Usually low contrast, missing quiet zone, or too much detail over the modules. Increase contrast and keep the margin.</div>
+    <div class="q"><b>What is a vCard?</b><br>A standard digital business card that saves name, phone, email, and more to a phone’s contacts.</div>
+    <div class="q"><b>Do QR codes expire?</b><br>No. A static QR code works forever as long as the destination (e.g., a URL) remains online.</div>
+    <div class="q"><b>Can I use QRVolt commercially?</b><br>Yes. Generated codes are yours to use for personal or business purposes.</div>
+    <div class="q"><b>Is there a size limit?</b><br>Content is limited by the QR standard (up to version 40). Very long text may need to be shortened.</div>
+    <div class="q"><b>How do I contact support?</b><br>Email <a href="mailto:hello@qrvolt.online">hello@qrvolt.online</a> and we’ll help.</div>
+
+    <h2>Safety tips</h2>
+    <p>
+      Only scan codes from sources you trust. A QR code can open links or actions just like a click,
+      so be cautious with codes in public places, and never enter sensitive credentials on sites
+      reached through an unknown code.
+    </p>
+  </div>
+
+  <div class="nav">
+    <a href="index.html">← Back to QRVolt</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+    <a href="blog.html">Blog</a>
+      <a href="wifi.html">Wi-Fi QR</a>
+      <a href="logo.html">QR with logo</a>
+      <a href="vcard.html">Business card QR</a>
+    <a href="updates.html">Updates</a>
+  </div>
+
+  <footer>QRVolt — 100% offline QR generation.</footer>
+</div>
+</body>
+</html>

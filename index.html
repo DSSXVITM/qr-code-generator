@@ -1,0 +1,2625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="QRVolt is a free, private, 100% offline QR code generator. Create branded QR codes for URLs, Wi-Fi, vCard, email, SMS, calls, geo, events, WhatsApp, PayPal and crypto. Export as PNG, JPG, WebP, SVG or PDF — no sign-up.">
+<title>QRVolt QR Code Generator — Free, private, 100% offline</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='.5' stop-color='%233b82f6'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='2' y='2' width='28' height='28' rx='7' fill='%23050d1a'/%3E%3Cpath d='M18 4 L9 18 H15 L13 28 L24 13 H17 Z' fill='url(%23g)'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#050d1a">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{
+  --bg:#050d1a;
+  --bg2:#081326;
+  --panel:rgba(18,28,48,.55);
+  --panel-border:rgba(140,160,255,.14);
+  --text:#e9edf7;
+  --sub:#93a2c2;
+  --purple:#8b5cf6;
+  --blue:#3b82f6;
+  --cyan:#22d3ee;
+  --grad:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan));
+  --danger:#f87171;
+  --ok:#34d399;
+  --radius:16px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(139,92,246,.16), transparent 45%),
+    radial-gradient(circle at 85% 10%, rgba(34,211,238,.14), transparent 45%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(140,160,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(140,160,255,.05) 1px,transparent 1px);
+  background-size:34px 34px;
+  pointer-events:none;
+  z-index:0;
+  mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 75%);
+}
+.wrap{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:28px 20px 80px;}
+header{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+.brand-mark{
+  width:46px;height:46px;border-radius:13px;
+  background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 22px rgba(139,92,246,.55), 0 0 44px rgba(34,211,238,.25);
+  flex-shrink:0;
+}
+.brand-mark svg{width:24px;height:24px;filter:drop-shadow(0 0 3px rgba(255,255,255,.6));}
+h1{font-size:26px;margin:0;letter-spacing:.2px;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.tagline{color:var(--sub);font-size:13px;margin-top:2px;}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start;}
+@media (max-width:980px){.grid{grid-template-columns:1fr;}}
+.card{
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:var(--radius);
+  padding:20px;
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+  margin-bottom:18px;
+}
+.card h2{font-size:14px;text-transform:uppercase;letter-spacing:.09em;color:var(--sub);margin:0 0 14px;font-weight:700;}
+.free-badge{display:inline-block;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:10px;letter-spacing:.06em;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;text-transform:none;}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.tab-btn{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--panel-border);
+  color:var(--sub);
+  padding:8px 14px;border-radius:999px;font-size:13px;cursor:pointer;transition:.15s;
+}
+.tab-btn:hover{color:var(--text);border-color:rgba(140,160,255,.35);}
+.tab-btn.active{
+  color:#fff;border-color:transparent;
+  background:var(--grad);
+  box-shadow:0 0 16px rgba(139,92,246,.45);
+}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+label{display:block;font-size:12.5px;color:var(--sub);margin:10px 0 5px;font-weight:600;}
+label:first-child{margin-top:0;}
+input[type=text],input[type=url],input[type=email],input[type=tel],input[type=password],textarea,select{
+  width:100%;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--panel-border);
+  color:var(--text);
+  padding:9px 12px;
+  border-radius:10px;
+  font-size:13.5px;
+  font-family:inherit;
+  outline:none;
+  transition:.15s;
+}
+input::placeholder,textarea::placeholder{color:#5c6a8c;}
+input:focus,textarea:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(34,211,238,.15);}
+textarea{resize:vertical;min-height:70px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.checkline{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;color:var(--sub);}
+.checkline input{width:auto;}
+select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%2393a2c2'/></svg>");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
+
+.section-sep{height:1px;background:rgba(140,160,255,.12);margin:18px 0;}
+.subhead{font-size:12px;color:var(--sub);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:14px 0 8px;}
+.subhead:first-child{margin-top:0;}
+
+.swatch-row{display:flex;align-items:center;gap:10px;}
+input[type=color]{
+  -webkit-appearance:none;appearance:none;width:38px;height:38px;border:none;border-radius:10px;background:none;cursor:pointer;padding:0;border:1px solid var(--panel-border);
+}
+input[type=color]::-webkit-color-swatch-wrapper{padding:2px;}
+input[type=color]::-webkit-color-swatch{border-radius:8px;border:none;}
+
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+.chip{
+  padding:7px 13px;border-radius:999px;font-size:12.5px;cursor:pointer;
+  border:1px solid var(--panel-border);background:rgba(255,255,255,.03);color:var(--text);
+  display:flex;align-items:center;gap:7px;transition:.15s;
+}
+.chip:hover{border-color:rgba(140,160,255,.4);transform:translateY(-1px);}
+.chip .dot{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:0 0 6px rgba(0,0,0,.4);}
+
+.seg{display:flex;background:rgba(255,255,255,.04);border:1px solid var(--panel-border);border-radius:10px;padding:3px;gap:3px;}
+.seg button{
+  flex:1;background:transparent;border:none;color:var(--sub);padding:8px 6px;border-radius:8px;font-size:12.5px;cursor:pointer;transition:.15s;
+}
+.seg button.active{background:var(--grad);color:#fff;box-shadow:0 0 10px rgba(139,92,246,.4);}
+
+.range-row{display:flex;align-items:center;gap:10px;}
+input[type=range]{flex:1;accent-color:var(--cyan);}
+.range-val{font-size:12px;color:var(--cyan);min-width:52px;text-align:right;font-variant-numeric:tabular-nums;}
+
+button.btn{
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--panel-border);
+  color:var(--text);
+  padding:10px 16px;border-radius:11px;font-size:13.5px;cursor:pointer;font-weight:600;transition:.15s;
+}
+button.btn:hover{border-color:rgba(140,160,255,.4);transform:translateY(-1px);}
+button.btn.primary{
+  background:var(--grad);border:none;color:#fff;
+  box-shadow:0 4px 18px rgba(139,92,246,.4);
+}
+button.btn.primary:hover{filter:brightness(1.08);}
+button.btn.small{padding:7px 11px;font-size:12px;}
+button.btn.danger{color:var(--danger);border-color:rgba(248,113,113,.3);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+
+.preview-stage{
+  display:flex;align-items:center;justify-content:center;
+  background:
+    linear-gradient(45deg,#0c1830 25%,transparent 25%),linear-gradient(-45deg,#0c1830 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#0c1830 75%),linear-gradient(-45deg,transparent 75%,#0c1830 75%);
+  background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px;
+  background-color:#0a1426;
+  border-radius:14px;border:1px solid var(--panel-border);
+  padding:22px;min-height:320px;position:relative;overflow:hidden;
+}
+#qrCanvas{max-width:100%;height:auto;border-radius:8px;box-shadow:0 0 40px rgba(59,130,246,.18);}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
+.meta-box{background:rgba(255,255,255,.03);border:1px solid var(--panel-border);border-radius:10px;padding:10px;text-align:center;}
+.meta-box .v{font-size:16px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.meta-box .k{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+@media (max-width:520px){.meta-grid{grid-template-columns:repeat(2,1fr);}}
+
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 11px;border-radius:999px;font-weight:600;margin-top:10px;margin-right:8px;}
+.badge.ok{background:rgba(52,211,153,.12);color:var(--ok);border:1px solid rgba(52,211,153,.3);}
+.badge.warn{background:rgba(248,113,113,.12);color:var(--danger);border:1px solid rgba(248,113,113,.3);}
+.badge.info{background:rgba(59,130,246,.12);color:#8fb4ff;border:1px solid rgba(59,130,246,.3);}
+
+.history-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;}
+.hist-item{background:rgba(255,255,255,.03);border:1px solid var(--panel-border);border-radius:10px;padding:6px;text-align:center;cursor:pointer;position:relative;transition:.15s;}
+.hist-item:hover{border-color:var(--cyan);transform:translateY(-2px);}
+.hist-item img{width:100%;border-radius:6px;display:block;background:#fff;}
+.hist-item .del{
+  position:absolute;top:2px;right:2px;background:rgba(5,13,26,.85);color:var(--danger);
+  border:none;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;line-height:1;
+}
+.hist-empty{color:var(--sub);font-size:13px;padding:10px 0;}
+
+#toasts{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:10px;max-width:320px;}
+.toast{
+  background:rgba(15,23,42,.95);border:1px solid var(--panel-border);border-left:3px solid var(--cyan);
+  padding:12px 15px;border-radius:10px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.5);
+  animation:slidein .25s ease;
+}
+.toast.err{border-left-color:var(--danger);}
+.toast.ok{border-left-color:var(--ok);}
+@keyframes slidein{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+
+.logo-drop{
+  border:1.5px dashed var(--panel-border);border-radius:10px;padding:16px;text-align:center;
+  font-size:12.5px;color:var(--sub);cursor:pointer;transition:.15s;
+}
+.logo-drop:hover{border-color:var(--cyan);color:var(--text);}
+.logo-thumb{width:36px;height:36px;border-radius:8px;object-fit:cover;vertical-align:middle;margin-right:8px;border:1px solid var(--panel-border);}
+
+.hint{font-size:11.5px;color:#5c6a8c;margin-top:5px;line-height:1.4;}
+a{color:var(--cyan);}
+footer{text-align:center;color:#4c597a;font-size:12px;margin-top:30px;}
+.foot-links{margin-top:10px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+.foot-links a{color:var(--sub);text-decoration:none;font-size:12.5px;}
+.foot-links a:hover{color:var(--cyan);}
+
+#cookieBanner{display:none;position:fixed;left:0;right:0;bottom:0;z-index:300;background:rgba(8,19,38,.97);border-top:1px solid var(--panel-border);backdrop-filter:blur(10px);padding:14px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.4);}
+.cookie-inner{max-width:1360px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.cookie-text{flex:1;min-width:240px;font-size:13px;color:var(--sub);line-height:1.5;}
+.cookie-btns{display:flex;gap:10px;}
+@media (max-width:560px){ .cookie-btns{width:100%;} .cookie-btns .btn{flex:1;} }
+.scan-box{background:rgba(255,255,255,.04);border:1px solid var(--panel-border);border-radius:10px;padding:12px;font-size:13.5px;color:var(--text);word-break:break-all;white-space:pre-wrap;margin-bottom:10px;}
+</style>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"QRVolt",
+  "url":"https://qrvolt.online/",
+  "description":"Free, private, 100% offline QR code generator with scan, branding and many content types."
+}
+</script>
+</head>
+<body>
+<div id="toasts"></div>
+<div class="wrap">
+  <header>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M13 2 L4 14h6l-1 8 9-12h-6z"/></svg>
+      </div>
+      <div>
+        <h1>QRVolt</h1>
+        <div class="tagline">QR codes at lightning speed.</div>
+      </div>
+    </div>
+    <button class="btn danger small" id="resetAllBtn" style="margin-left:auto;">↺ Reset all</button>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT COLUMN -->
+    <div>
+      <div class="card">
+        <h2>Content</h2>
+        <div class="tabs" id="contentTabs">
+          <button class="tab-btn active" data-tab="url">URL</button>
+          <button class="tab-btn" data-tab="text">Text</button>
+          <button class="tab-btn" data-tab="wifi">Wi-Fi</button>
+          <button class="tab-btn" data-tab="email">Email</button>
+          <button class="tab-btn" data-tab="vcard">vCard</button>
+          <button class="tab-btn" data-tab="sms">SMS</button>
+          <button class="tab-btn" data-tab="phone">Call</button>
+          <button class="tab-btn" data-tab="geo">Geo</button>
+          <button class="tab-btn" data-tab="event">Event</button>
+          <button class="tab-btn" data-tab="whatsapp">WhatsApp</button>
+          <button class="tab-btn" data-tab="paypal">PayPal</button>
+          <button class="tab-btn" data-tab="crypto">Crypto</button>
+          <button class="tab-btn" data-tab="pdf">PDF</button>
+          <button class="tab-btn" data-tab="app">App</button>
+          <button class="tab-btn" data-tab="multiurl">Multi-URL</button>
+          <button class="tab-btn" data-tab="social">Social</button>
+        </div>
+
+        <div class="tab-panel active" data-panel="url">
+          <label>Website URL</label>
+          <input type="text" id="urlInput" value="qrvolt.online" placeholder="qrvolt.online">
+          <div class="hint">https:// is added automatically if you don't include a scheme.</div>
+        </div>
+
+        <div class="tab-panel" data-panel="text">
+          <label>Plain text</label>
+          <textarea id="textInput" placeholder="Type anything…">Hello from QRVolt ⚡</textarea>
+        </div>
+
+        <div class="tab-panel" data-panel="wifi">
+          <label>Network name (SSID)</label>
+          <input type="text" id="wifiSsid" placeholder="MyHomeWiFi">
+          <div class="row2">
+            <div>
+              <label>Security</label>
+              <select id="wifiEnc">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Open (none)</option>
+              </select>
+            </div>
+            <div>
+              <label>Password</label>
+              <input type="text" id="wifiPass" placeholder="password">
+            </div>
+          </div>
+          <div class="checkline"><input type="checkbox" id="wifiHidden"><span>Hidden network</span></div>
+        </div>
+
+        <div class="tab-panel" data-panel="email">
+          <label>To</label>
+          <input type="text" id="emailTo" placeholder="someone@example.com">
+          <label>Subject</label>
+          <input type="text" id="emailSubject" placeholder="Subject">
+          <label>Body</label>
+          <textarea id="emailBody" placeholder="Message…"></textarea>
+        </div>
+
+        <div class="tab-panel" data-panel="vcard">
+          <div class="row2">
+            <div><label>Full name</label><input type="text" id="vName" placeholder="Ada Lovelace"></div>
+            <div><label>Organization</label><input type="text" id="vOrg" placeholder="Analytical Engines Inc."></div>
+          </div>
+          <div class="row2">
+            <div><label>Phone</label><input type="text" id="vPhone" placeholder="+1 555 0100"></div>
+            <div><label>Email</label><input type="text" id="vEmail" placeholder="ada@example.com"></div>
+          </div>
+          <label>Website</label>
+          <input type="text" id="vUrl" placeholder="example.com">
+        </div>
+
+        <div class="tab-panel" data-panel="sms">
+          <label>Phone number</label>
+          <input type="text" id="smsPhone" placeholder="+1 555 0100">
+          <label>Message</label>
+          <textarea id="smsBody" placeholder="Your message…"></textarea>
+        </div>
+
+        <div class="tab-panel" data-panel="phone">
+          <label>Phone number (tel:)</label>
+          <input type="text" id="phoneNum" placeholder="+1 555 0100">
+          <div class="hint">Opens the dialer when scanned.</div>
+        </div>
+
+        <div class="tab-panel" data-panel="geo">
+          <div class="row2">
+            <div><label>Latitude</label><input type="text" id="geoLat" placeholder="40.7128"></div>
+            <div><label>Longitude</label><input type="text" id="geoLng" placeholder="-74.0060"></div>
+          </div>
+          <label>Label (optional)</label>
+          <input type="text" id="geoQ" placeholder="Empire State Building">
+        </div>
+
+        <div class="tab-panel" data-panel="event">
+          <label>Title</label>
+          <input type="text" id="evTitle" placeholder="Meeting">
+          <div class="row2">
+            <div><label>Start (YYYY-MM-DD)</label><input type="text" id="evStart" placeholder="2026-01-01"></div>
+            <div><label>End (YYYY-MM-DD)</label><input type="text" id="evEnd" placeholder="2026-01-01"></div>
+          </div>
+          <label>Location</label>
+          <input type="text" id="evLoc" placeholder="Office">
+          <label>Description</label>
+          <textarea id="evDesc" placeholder="Details…"></textarea>
+        </div>
+
+        <div class="tab-panel" data-panel="whatsapp">
+          <label>Phone number (with country code)</label>
+          <input type="text" id="waPhone" placeholder="15551234567">
+          <label>Message (optional)</label>
+          <input type="text" id="waMsg" placeholder="Hello!">
+          <div class="hint">Opens a WhatsApp chat when scanned.</div>
+        </div>
+
+        <div class="tab-panel" data-panel="paypal">
+          <label>PayPal.me username</label>
+          <input type="text" id="ppUser" placeholder="yourname">
+          <label>Amount (optional)</label>
+          <input type="text" id="ppAmount" placeholder="10.00">
+          <label>Currency (optional)</label>
+          <input type="text" id="ppCur" placeholder="USD">
+        </div>
+
+        <div class="tab-panel" data-panel="crypto">
+          <label>Coin</label>
+          <select id="crCoin">
+            <option value="bitcoin">Bitcoin (BTC)</option>
+            <option value="ethereum">Ethereum (ETH)</option>
+            <option value="litecoin">Litecoin (LTC)</option>
+            <option value="dogecoin">Dogecoin (DOGE)</option>
+            <option value="dash">Dash</option>
+          </select>
+          <label>Address</label>
+          <input type="text" id="crAddr" placeholder="bc1qexample...">
+          <label>Amount (optional)</label>
+          <input type="text" id="crAmount" placeholder="0.01">
+        </div>
+
+        <div class="tab-panel" data-panel="pdf">
+          <label>Direct link to a PDF file</label>
+          <input type="text" id="pdfUrl" placeholder="https://example.com/menu.pdf">
+          <div class="hint">Encode a URL pointing straight to a PDF (menu, brochure, ticket…).</div>
+        </div>
+
+        <div class="tab-panel" data-panel="app">
+          <label>Store</label>
+          <select id="appPlat">
+            <option value="google">Google Play</option>
+            <option value="apple">App Store</option>
+            <option value="custom">Other / direct link</option>
+          </select>
+          <label id="appIdLabel">Package name (e.g. com.example.app)</label>
+          <input type="text" id="appId" placeholder="com.example.app">
+          <div class="hint">Scans open the app's store page or your custom link.</div>
+        </div>
+
+        <div class="tab-panel" data-panel="multiurl">
+          <label>One URL per line</label>
+          <textarea id="multiUrls" rows="5" placeholder="https://example.com/one&#10;https://example.com/two"></textarea>
+          <button class="btn small" id="multiGen" style="margin-top:8px;">Generate batch</button>
+          <button class="btn small" id="multiZip" style="margin-top:8px;">⬇ Download all (.zip)</button>
+          <div class="hint">Creates a separate QR for each link — download them individually.</div>
+          <div class="hist-grid" id="multiGrid"></div>
+        </div>
+
+        <div class="tab-panel" data-panel="social">
+          <label>Social profile links (one per line)</label>
+          <textarea id="socialUrls" rows="5" placeholder="https://instagram.com/yourname&#10;https://facebook.com/yourpage&#10;https://youtube.com/@yourchannel"></textarea>
+          <div class="chip-row" style="margin-top:8px;">
+            <button class="chip" data-soc="https://instagram.com/">+ Instagram</button>
+            <button class="chip" data-soc="https://facebook.com/">+ Facebook</button>
+            <button class="chip" data-soc="https://x.com/">+ X</button>
+            <button class="chip" data-soc="https://youtube.com/">+ YouTube</button>
+            <button class="chip" data-soc="https://linkedin.com/">+ LinkedIn</button>
+            <button class="chip" data-soc="https://tiktok.com/">+ TikTok</button>
+          </div>
+          <button class="btn small" id="socialGen" style="margin-top:8px;">Generate batch</button>
+          <button class="btn small" id="socialZip" style="margin-top:8px;">⬇ Download all (.zip)</button>
+          <div class="hist-grid" id="socialGrid"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Design Studio</h2>
+
+        <div class="subhead">Presets</div>
+        <div class="chip-row" id="presetChips">
+          <button class="chip" data-preset="classic"><span class="dot" style="background:#111"></span>Classic</button>
+          <button class="chip" data-preset="volt"><span class="dot" style="background:linear-gradient(90deg,#8b5cf6,#22d3ee)"></span>Volt</button>
+          <button class="chip" data-preset="midnight"><span class="dot" style="background:#3b82f6"></span>Midnight</button>
+          <button class="chip" data-preset="sunset"><span class="dot" style="background:#fb923c"></span>Sunset</button>
+          <button class="chip" id="randomizeBtn">🎲 Randomize</button>
+          <button class="chip" id="savePresetBtn">＋ Save preset</button>
+        </div>
+        <div class="chip-row" id="customPresetChips"></div>
+
+        <div class="subhead">Colors</div>
+        <div class="chip-row" id="paletteChips"></div>
+        <div class="row2" style="margin-top:10px;">
+          <div>
+            <label>Module color</label>
+            <div class="swatch-row"><input type="color" id="colorA" value="#111111"><input type="text" id="colorAHex" value="#111111" style="flex:1"></div>
+          </div>
+          <div>
+            <label>Background</label>
+            <div class="swatch-row"><input type="color" id="bgColor" value="#ffffff"><input type="text" id="bgColorHex" value="#ffffff" style="flex:1"></div>
+          </div>
+        </div>
+        <div class="checkline"><input type="checkbox" id="gradientToggle"><span>Use gradient for modules</span></div>
+        <div id="gradientRow" style="display:none;margin-top:8px;">
+          <div class="row3">
+            <div>
+              <label>Gradient start</label>
+              <div class="swatch-row"><input type="color" id="colorA2" value="#8b5cf6"></div>
+            </div>
+            <div>
+              <label>Middle</label>
+              <div class="swatch-row"><input type="color" id="colorM" value="#ec4899"></div>
+            </div>
+            <div>
+              <label>Gradient end</label>
+              <div class="swatch-row"><input type="color" id="colorB2" value="#22d3ee"></div>
+            </div>
+          </div>
+          <div class="row2" style="margin-top:8px;">
+            <div>
+              <label>Gradient type</label>
+              <select id="gradientType">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+              </select>
+            </div>
+            <div id="gradientAngleWrap">
+              <label>Angle</label>
+              <div class="range-row"><input type="range" id="gradientAngle" min="0" max="360" step="5" value="45"><span class="range-val" id="gradientAngleVal">45°</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="checkline"><input type="checkbox" id="transparentBg"><span>Transparent background (PNG/SVG)</span></div>
+
+        <div class="subhead">Module &amp; Eye Style</div>
+        <label>Module shape</label>
+        <div class="seg" id="moduleStyleSeg">
+          <button class="active" data-val="square">Square</button>
+          <button data-val="rounded">Rounded</button>
+          <button data-val="dots">Dots</button>
+          <button data-val="classy">Classy</button>
+          <button data-val="bars">Bars</button>
+          <button data-val="diamond">Diamond</button>
+        </div>
+        <label>Eye shape</label>
+        <div class="seg" id="eyeStyleSeg">
+          <button class="active" data-val="square">Square</button>
+          <button data-val="rounded">Rounded</button>
+          <button data-val="circle">Circle</button>
+        </div>
+        <div class="row2" style="margin-top:10px;">
+          <div>
+            <label>Eye outer color</label>
+            <div class="swatch-row"><input type="color" id="eyeOuterColor" value="#111111"></div>
+          </div>
+          <div>
+            <label>Eye inner color</label>
+            <div class="swatch-row"><input type="color" id="eyeInnerColor" value="#111111"></div>
+          </div>
+        </div>
+
+        <div class="subhead">Size &amp; Layout</div>
+        <label>Canvas size</label>
+        <div class="range-row"><input type="range" id="sizeSlider" min="256" max="2048" step="16" value="512"><span class="range-val" id="sizeVal">512px</span></div>
+        <label>Quiet zone (margin)</label>
+        <div class="range-row"><input type="range" id="quietZoneSlider" min="0" max="8" step="1" value="4"><span class="range-val" id="quietZoneVal">4 modules</span></div>
+
+        <div class="subhead">Error correction</div>
+        <div class="seg" id="eccSeg">
+          <button data-val="L">L</button>
+          <button data-val="M">M</button>
+          <button data-val="Q">Q</button>
+          <button class="active" data-val="H">H</button>
+        </div>
+        <div class="hint">H recommended when a logo is placed on top.</div>
+      </div>
+
+      <div class="card">
+        <h2>Logo</h2>
+        <div class="subhead">Logo position</div>
+        <div class="seg" id="logoPosSeg">
+          <button class="active" data-val="none">None</button>
+          <button data-val="center">Center</button>
+          <button data-val="top">Top</button>
+        </div>
+        <div id="logoControls" style="display:none;margin-top:10px;">
+          <div class="seg" id="logoSourceSeg">
+            <button class="active" data-val="volt">QRVolt logo</button>
+            <button data-val="custom">Upload image</button>
+          </div>
+          <div id="logoUploadRow" style="display:none;margin-top:10px;">
+            <div class="logo-drop" id="logoDrop">Click or drop an image (PNG/JPG/SVG)</div>
+            <input type="file" id="logoFile" accept="image/*" style="display:none;">
+            <div id="logoPreviewWrap" style="margin-top:8px;display:none;"><img id="logoPreview" class="logo-thumb"><span style="font-size:12px;color:var(--sub)">custom logo loaded</span></div>
+          </div>
+          <label>Logo size (% of QR)</label>
+          <div class="range-row"><input type="range" id="logoSize" min="14" max="30" step="1" value="20"><span class="range-val" id="logoSizeVal">20%</span></div>
+          <div class="checkline"><input type="checkbox" id="logoPlate" checked><span>Padding plate behind logo</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Export</h2>
+        <label>PNG scale</label>
+        <div class="seg" id="pngScaleSeg">
+          <button class="active" data-val="1">1×</button>
+          <button data-val="2">2×</button>
+          <button data-val="4">4×</button>
+          <button data-val="8">8×</button>
+        </div>
+        <div class="section-sep"></div>
+        <label>Caption / label (printed with QR)</label>
+        <input type="text" id="captionText" placeholder="Scan me!">
+        <div class="row2" style="margin-top:8px;">
+          <div>
+            <label>Position</label>
+            <select id="captionPos">
+              <option value="none">None</option>
+              <option value="top">Above</option>
+              <option value="bottom">Below</option>
+            </select>
+          </div>
+          <div>
+            <label>Font size</label>
+            <div class="range-row"><input type="range" id="captionSize" min="4" max="20" step="1" value="9"><span class="range-val" id="captionSizeVal">9%</span></div>
+          </div>
+        </div>
+        <label style="margin-top:8px;display:block;">Style</label>
+        <select id="captionStyle">
+          <option value="plain">Plain text</option>
+          <option value="pill">Button / pill</option>
+        </select>
+        <div class="btn-row">
+          <button class="btn primary" id="downloadPng">⬇ Download PNG</button>
+          <button class="btn" id="downloadJpg">⬇ Download JPG</button>
+          <button class="btn" id="downloadWebp">⬇ Download WebP</button>
+          <button class="btn" id="downloadSvg">⬇ Download SVG</button>
+          <button class="btn" id="downloadPdf">⬇ Download PDF</button>
+          <button class="btn" id="printBtn">🖨 Print</button>
+          <button class="btn" id="copyBtn">⧉ Copy to clipboard</button>
+          <button class="btn" id="shareBtn">🔗 Share design</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Scan &amp; Read QR <span class="free-badge">100% FREE</span></h2>
+        <div class="logo-drop" id="scanDrop">Click or drop a QR image to decode</div>
+        <input type="file" id="scanFile" accept="image/*" style="display:none;">
+        <div class="btn-row">
+          <button class="btn small" id="scanCameraBtn">📷 Use camera</button>
+          <button class="btn small" id="scanStopBtn" style="display:none;">■ Stop camera</button>
+        </div>
+        <video id="scanVideo" playsinline style="display:none;width:100%;border-radius:12px;margin-top:10px;background:#000;max-height:320px;"></video>
+        <div id="scanResult" style="margin-top:12px;"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div style="position:sticky;top:20px;">
+      <div class="card">
+        <h2>Live Preview</h2>
+        <div class="preview-stage">
+          <canvas id="qrCanvas" width="512" height="512"></canvas>
+        </div>
+        <div id="badgeRow"></div>
+        <div class="meta-grid">
+          <div class="meta-box"><div class="v" id="metaVersion">–</div><div class="k">QR Version</div></div>
+          <div class="meta-box"><div class="v" id="metaModules">–</div><div class="k">Modules</div></div>
+          <div class="meta-box"><div class="v" id="metaEcc">–</div><div class="k">ECC Level</div></div>
+          <div class="meta-box"><div class="v" id="metaBytes">–</div><div class="k">Payload Bytes</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    QRVolt — 100% offline QR generation. No data ever leaves your browser.
+    <div class="foot-links">
+      <a href="about.html">About</a>
+      <a href="guide.html">Guide &amp; FAQ</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="contact.html">Contact</a>
+      <a href="blog.html">Blog</a>
+      <a href="wifi.html">Wi-Fi QR</a>
+      <a href="logo.html">QR with logo</a>
+      <a href="vcard.html">Business card QR</a>
+      <a href="updates.html">Updates</a>
+    </div>
+  </footer>
+</div>
+
+<div id="cookieBanner">
+  <div class="cookie-inner">
+    <div class="cookie-text">
+      We use cookies to improve your experience and to serve personalized ads via Google AdSense.
+      By clicking “Accept” you consent to our use of cookies as described in our
+      <a href="privacy.html">Privacy Policy</a>.
+    </div>
+    <div class="cookie-btns">
+      <button class="btn small" id="cookieReject">Reject</button>
+      <button class="btn small primary" id="cookieAccept">Accept</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Cookie consent — required before any ad/analytics cookies are set (GDPR / AdSense). */
+(function(){
+  var KEY = "qrvolt_cookie_consent";
+  var banner = document.getElementById("cookieBanner");
+  function show(){ banner.style.display = "block"; }
+  function hide(){ banner.style.display = "none"; }
+  var consent = null;
+  try { consent = localStorage.getItem(KEY); } catch(e){}
+  if(!consent){ show(); }
+  function loadAds(){
+    if(window.__qrvoltAds) return; window.__qrvoltAds = true;
+    /* TODO: insert your AdSense publisher ID (ca-pub-XXXXXXXXXXXXXXXX) */
+    /*
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX";
+    document.head.appendChild(s);
+    */
+  }
+  document.getElementById("cookieAccept").addEventListener("click", function(){
+    try { localStorage.setItem(KEY, "accepted"); } catch(e){}
+    hide(); loadAds();
+  });
+  document.getElementById("cookieReject").addEventListener("click", function(){
+    try { localStorage.setItem(KEY, "rejected"); } catch(e){}
+    hide();
+  });
+  if(consent === "accepted"){ loadAds(); }
+})();
+</script>
+
+<script>
+/* =========================================================================
+   QR ENCODER — vanilla JS implementation of ISO/IEC 18004, following the
+   well-known public MIT-licensed algorithm structure by Kazuhiko Arase
+   (qrcode-generator). Reimplemented here inline, no network dependency.
+   ========================================================================= */
+(function(global){
+"use strict";
+
+var QRMode = { MODE_NUMBER:1<<0, MODE_ALPHA_NUM:1<<1, MODE_8BIT_BYTE:1<<2, MODE_KANJI:1<<3 };
+var QRErrorCorrectLevel = { L:1, M:0, Q:3, H:2 };
+
+var QRMath = {
+  glog:function(n){ if(n<1) throw new Error("glog("+n+")"); return QRMath.LOG_TABLE[n]; },
+  gexp:function(n){ while(n<0)n+=255; while(n>=256)n-=255; return QRMath.EXP_TABLE[n]; },
+  EXP_TABLE:new Array(256), LOG_TABLE:new Array(256)
+};
+(function(){
+  for(var i=0;i<8;i++) QRMath.EXP_TABLE[i]=1<<i;
+  for(var i=8;i<256;i++) QRMath.EXP_TABLE[i]=QRMath.EXP_TABLE[i-4]^QRMath.EXP_TABLE[i-5]^QRMath.EXP_TABLE[i-6]^QRMath.EXP_TABLE[i-8];
+  for(var i=0;i<255;i++) QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]]=i;
+})();
+
+function QRPolynomial(num, shift){
+  if(num.length===undefined) throw new Error(num.length+"/"+shift);
+  var offset=0;
+  while(offset<num.length && num[offset]===0) offset++;
+  this.num=new Array(num.length-offset+shift);
+  for(var i=0;i<num.length-offset;i++) this.num[i]=num[i+offset];
+}
+QRPolynomial.prototype={
+  get:function(i){return this.num[i];},
+  getLength:function(){return this.num.length;},
+  multiply:function(e){
+    var num=new Array(this.getLength()+e.getLength()-1);
+    for(var i=0;i<num.length;i++) num[i]=0;
+    for(var i=0;i<this.getLength();i++)
+      for(var j=0;j<e.getLength();j++)
+        num[i+j]^=QRMath.gexp(QRMath.glog(this.get(i))+QRMath.glog(e.get(j)));
+    return new QRPolynomial(num,0);
+  },
+  mod:function(e){
+    if(this.getLength()-e.getLength()<0) return this;
+    var ratio=QRMath.glog(this.get(0))-QRMath.glog(e.get(0));
+    var num=new Array(this.getLength());
+    for(var i=0;i<this.getLength();i++) num[i]=this.get(i);
+    for(var i=0;i<e.getLength();i++) num[i]^=QRMath.gexp(QRMath.glog(e.get(i))+ratio);
+    return new QRPolynomial(num,0).mod(e);
+  }
+};
+
+var RS_BLOCK_TABLE = [
+  [1,26,19],[1,26,16],[1,26,13],[1,26,9],
+  [1,44,34],[1,44,28],[1,44,22],[1,44,16],
+  [1,70,55],[1,70,44],[2,35,17],[2,35,13],
+  [1,100,80],[2,50,32],[2,50,24],[4,25,9],
+  [1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],
+  [2,86,68],[4,43,27],[4,43,19],[4,43,15],
+  [2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],
+  [2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],
+  [2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],
+  [2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],
+  [4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],
+  [2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],
+  [4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],
+  [3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],
+  [5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],
+  [5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],
+  [1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],
+  [5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],
+  [3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],
+  [3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],
+  [4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],
+  [2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],
+  [4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],
+  [6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],
+  [8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],
+  [10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],
+  [8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],
+  [3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],
+  [7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],
+  [5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],
+  [13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],
+  [17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],
+  [17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],
+  [13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],
+  [12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],
+  [6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],
+  [17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],
+  [4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],
+  [20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],
+  [19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]
+];
+
+function getRsBlockTable(typeNumber, ecl){
+  switch(ecl){
+    case QRErrorCorrectLevel.L: return RS_BLOCK_TABLE[(typeNumber-1)*4+0];
+    case QRErrorCorrectLevel.M: return RS_BLOCK_TABLE[(typeNumber-1)*4+1];
+    case QRErrorCorrectLevel.Q: return RS_BLOCK_TABLE[(typeNumber-1)*4+2];
+    case QRErrorCorrectLevel.H: return RS_BLOCK_TABLE[(typeNumber-1)*4+3];
+  }
+}
+function getRSBlocks(typeNumber, ecl){
+  var rsBlock = getRsBlockTable(typeNumber, ecl);
+  if(!rsBlock) throw new Error("bad rs block @ typeNumber:"+typeNumber+"/errorCorrectLevel:"+ecl);
+  var length = rsBlock.length/3;
+  var list=[];
+  for(var i=0;i<length;i++){
+    var count=rsBlock[i*3+0], totalCount=rsBlock[i*3+1], dataCount=rsBlock[i*3+2];
+    for(var j=0;j<count;j++) list.push({totalCount:totalCount, dataCount:dataCount});
+  }
+  return list;
+}
+
+var QRUtil = {
+  PATTERN_POSITION_TABLE:[
+    [],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],
+    [6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],
+    [6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],
+    [6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],
+    [6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],
+    [6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],
+    [6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]
+  ],
+  G15:(1<<10)|(1<<8)|(1<<5)|(1<<4)|(1<<2)|(1<<1)|(1<<0),
+  G18:(1<<12)|(1<<11)|(1<<10)|(1<<9)|(1<<8)|(1<<5)|(1<<2)|(1<<0),
+  G15_MASK:(1<<14)|(1<<12)|(1<<10)|(1<<4)|(1<<1),
+  getBCHDigit:function(data){ var d=0; while(data!==0){d++;data>>>=1;} return d; },
+  getBCHTypeInfo:function(data){
+    var d=data<<10;
+    while(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G15)>=0)
+      d^=(QRUtil.G15<<(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G15)));
+    return ((data<<10)|d)^QRUtil.G15_MASK;
+  },
+  getBCHTypeNumber:function(data){
+    var d=data<<12;
+    while(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G18)>=0)
+      d^=(QRUtil.G18<<(QRUtil.getBCHDigit(d)-QRUtil.getBCHDigit(QRUtil.G18)));
+    return (data<<12)|d;
+  },
+  getPatternPosition:function(typeNumber){ return QRUtil.PATTERN_POSITION_TABLE[typeNumber-1]; },
+  getMask:function(pattern,i,j){
+    switch(pattern){
+      case 0: return (i+j)%2===0;
+      case 1: return i%2===0;
+      case 2: return j%3===0;
+      case 3: return (i+j)%3===0;
+      case 4: return (Math.floor(i/2)+Math.floor(j/3))%2===0;
+      case 5: return (i*j)%2+(i*j)%3===0;
+      case 6: return ((i*j)%2+(i*j)%3)%2===0;
+      case 7: return ((i*j)%3+(i+j)%2)%2===0;
+      default: throw new Error("bad maskPattern:"+pattern);
+    }
+  },
+  getErrorCorrectPolynomial:function(len){
+    var a=new QRPolynomial([1],0);
+    for(var i=0;i<len;i++) a=a.multiply(new QRPolynomial([1,QRMath.gexp(i)],0));
+    return a;
+  },
+  getLengthInBits:function(mode,type){
+    if(type>=1 && type<10){
+      switch(mode){case QRMode.MODE_NUMBER:return 10;case QRMode.MODE_ALPHA_NUM:return 9;case QRMode.MODE_8BIT_BYTE:return 8;case QRMode.MODE_KANJI:return 8;}
+    } else if(type<27){
+      switch(mode){case QRMode.MODE_NUMBER:return 12;case QRMode.MODE_ALPHA_NUM:return 11;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 10;}
+    } else if(type<41){
+      switch(mode){case QRMode.MODE_NUMBER:return 14;case QRMode.MODE_ALPHA_NUM:return 13;case QRMode.MODE_8BIT_BYTE:return 16;case QRMode.MODE_KANJI:return 12;}
+    }
+    throw new Error("type:"+type);
+  },
+  getLostPoint:function(qr){
+    var mc=qr.getModuleCount(), lost=0;
+    for(var row=0;row<mc;row++){
+      for(var col=0;col<mc;col++){
+        var same=0, dark=qr.isDark(row,col);
+        for(var r=-1;r<=1;r++){
+          if(row+r<0||mc<=row+r) continue;
+          for(var c=-1;c<=1;c++){
+            if(col+c<0||mc<=col+c) continue;
+            if(r===0&&c===0) continue;
+            if(dark===qr.isDark(row+r,col+c)) same++;
+          }
+        }
+        if(same>5) lost += (3+same-5);
+      }
+    }
+    for(var row=0;row<mc-1;row++){
+      for(var col=0;col<mc-1;col++){
+        var cnt=0;
+        if(qr.isDark(row,col))cnt++;
+        if(qr.isDark(row+1,col))cnt++;
+        if(qr.isDark(row,col+1))cnt++;
+        if(qr.isDark(row+1,col+1))cnt++;
+        if(cnt===0||cnt===4) lost+=3;
+      }
+    }
+    for(var row=0;row<mc;row++){
+      for(var col=0;col<mc-6;col++){
+        if(qr.isDark(row,col)&&!qr.isDark(row,col+1)&&qr.isDark(row,col+2)&&qr.isDark(row,col+3)&&qr.isDark(row,col+4)&&!qr.isDark(row,col+5)&&qr.isDark(row,col+6)) lost+=40;
+      }
+    }
+    for(var col=0;col<mc;col++){
+      for(var row=0;row<mc-6;row++){
+        if(qr.isDark(row,col)&&!qr.isDark(row+1,col)&&qr.isDark(row+2,col)&&qr.isDark(row+3,col)&&qr.isDark(row+4,col)&&!qr.isDark(row+5,col)&&qr.isDark(row+6,col)) lost+=40;
+      }
+    }
+    var dark=0;
+    for(var col=0;col<mc;col++) for(var row=0;row<mc;row++) if(qr.isDark(row,col)) dark++;
+    var ratio=Math.abs(100*dark/mc/mc-50)/5;
+    lost += ratio*10;
+    return lost;
+  }
+};
+
+function QRBitBuffer(){ this.buffer=[]; this.length=0; }
+QRBitBuffer.prototype={
+  get:function(i){ var bi=Math.floor(i/8); return ((this.buffer[bi]>>>(7-i%8))&1)===1; },
+  put:function(num,length){ for(var i=0;i<length;i++) this.putBit(((num>>>(length-i-1))&1)===1); },
+  getLengthInBits:function(){ return this.length; },
+  putBit:function(bit){
+    var bi=Math.floor(this.length/8);
+    if(this.buffer.length<=bi) this.buffer.push(0);
+    if(bit) this.buffer[bi]|=(0x80>>>(this.length%8));
+    this.length++;
+  }
+};
+
+function utf8Bytes(str){
+  if(typeof TextEncoder!=="undefined") return Array.from(new TextEncoder().encode(str));
+  var bytes=[];
+  for(var i=0;i<str.length;i++){
+    var c=str.codePointAt(i);
+    if(c>0xFFFF) i++;
+    if(c<0x80) bytes.push(c);
+    else if(c<0x800){ bytes.push(0xC0|(c>>6), 0x80|(c&0x3F)); }
+    else if(c<0x10000){ bytes.push(0xE0|(c>>12), 0x80|((c>>6)&0x3F), 0x80|(c&0x3F)); }
+    else { bytes.push(0xF0|(c>>18), 0x80|((c>>12)&0x3F), 0x80|((c>>6)&0x3F), 0x80|(c&0x3F)); }
+  }
+  return bytes;
+}
+
+function QR8bitByte(data){
+  this.mode=QRMode.MODE_8BIT_BYTE;
+  this.data=data;
+  this.bytes=utf8Bytes(data);
+}
+QR8bitByte.prototype={
+  getLength:function(){ return this.bytes.length; },
+  write:function(buffer){ for(var i=0;i<this.bytes.length;i++) buffer.put(this.bytes[i],8); }
+};
+
+function QRCodeModel(typeNumber, errorCorrectLevel){
+  this.typeNumber=typeNumber;
+  this.errorCorrectLevel=errorCorrectLevel;
+  this.modules=null; this.moduleCount=0; this.dataCache=null; this.dataList=[];
+}
+QRCodeModel.PAD0=0xEC; QRCodeModel.PAD1=0x11;
+QRCodeModel.prototype={
+  addData:function(data){ this.dataList.push(new QR8bitByte(data)); this.dataCache=null; },
+  isDark:function(row,col){
+    if(row<0||this.moduleCount<=row||col<0||this.moduleCount<=col) throw new Error(row+","+col);
+    return this.modules[row][col];
+  },
+  getModuleCount:function(){ return this.moduleCount; },
+  make:function(){ this.makeImpl(false, this.getBestMaskPattern()); },
+  getBestMaskPattern:function(){
+    var minLost=0, pattern=0;
+    for(var i=0;i<8;i++){
+      this.makeImpl(true,i);
+      var lost=QRUtil.getLostPoint(this);
+      if(i===0||minLost>lost){ minLost=lost; pattern=i; }
+    }
+    return pattern;
+  },
+  makeImpl:function(test,maskPattern){
+    this.moduleCount=this.typeNumber*4+17;
+    this.modules=new Array(this.moduleCount);
+    for(var row=0;row<this.moduleCount;row++){
+      this.modules[row]=new Array(this.moduleCount);
+      for(var col=0;col<this.moduleCount;col++) this.modules[row][col]=null;
+    }
+    this.setupPositionProbePattern(0,0);
+    this.setupPositionProbePattern(this.moduleCount-7,0);
+    this.setupPositionProbePattern(0,this.moduleCount-7);
+    this.setupPositionAdjustPattern();
+    this.setupTimingPattern();
+    this.setupTypeInfo(test,maskPattern);
+    if(this.typeNumber>=7) this.setupTypeNumber(test);
+    if(this.dataCache==null) this.dataCache=QRCodeModel.createData(this.typeNumber,this.errorCorrectLevel,this.dataList);
+    this.mapData(this.dataCache,maskPattern);
+  },
+  setupPositionProbePattern:function(row,col){
+    for(var r=-1;r<=7;r++){
+      if(row+r<=-1||this.moduleCount<=row+r) continue;
+      for(var c=-1;c<=7;c++){
+        if(col+c<=-1||this.moduleCount<=col+c) continue;
+        if((0<=r&&r<=6&&(c===0||c===6))||(0<=c&&c<=6&&(r===0||r===6))||(2<=r&&r<=4&&2<=c&&c<=4))
+          this.modules[row+r][col+c]=true;
+        else this.modules[row+r][col+c]=false;
+      }
+    }
+  },
+  setupTimingPattern:function(){
+    for(var r=8;r<this.moduleCount-8;r++){ if(this.modules[r][6]!=null) continue; this.modules[r][6]=(r%2===0); }
+    for(var c=8;c<this.moduleCount-8;c++){ if(this.modules[6][c]!=null) continue; this.modules[6][c]=(c%2===0); }
+  },
+  setupPositionAdjustPattern:function(){
+    var pos=QRUtil.getPatternPosition(this.typeNumber);
+    for(var i=0;i<pos.length;i++){
+      for(var j=0;j<pos.length;j++){
+        var row=pos[i], col=pos[j];
+        if(this.modules[row][col]!=null) continue;
+        for(var r=-2;r<=2;r++){
+          for(var c=-2;c<=2;c++){
+            if(r===-2||r===2||c===-2||c===2||(r===0&&c===0)) this.modules[row+r][col+c]=true;
+            else this.modules[row+r][col+c]=false;
+          }
+        }
+      }
+    }
+  },
+  setupTypeNumber:function(test){
+    var bits=QRUtil.getBCHTypeNumber(this.typeNumber);
+    for(var i=0;i<18;i++){
+      var mod=(!test&&((bits>>i)&1)===1);
+      this.modules[Math.floor(i/3)][i%3+this.moduleCount-8-3]=mod;
+    }
+    for(var i=0;i<18;i++){
+      var mod=(!test&&((bits>>i)&1)===1);
+      this.modules[i%3+this.moduleCount-8-3][Math.floor(i/3)]=mod;
+    }
+  },
+  setupTypeInfo:function(test,maskPattern){
+    var data=(this.errorCorrectLevel<<3)|maskPattern;
+    var bits=QRUtil.getBCHTypeInfo(data);
+    for(var i=0;i<15;i++){
+      var mod=(!test&&((bits>>i)&1)===1);
+      if(i<6) this.modules[i][8]=mod;
+      else if(i<8) this.modules[i+1][8]=mod;
+      else this.modules[this.moduleCount-15+i][8]=mod;
+    }
+    for(var i=0;i<15;i++){
+      var mod=(!test&&((bits>>i)&1)===1);
+      if(i<8) this.modules[8][this.moduleCount-i-1]=mod;
+      else if(i<9) this.modules[8][15-i-1+1]=mod;
+      else this.modules[8][15-i-1]=mod;
+    }
+    this.modules[this.moduleCount-8][8]=(!test);
+  },
+  mapData:function(data,maskPattern){
+    var inc=-1, row=this.moduleCount-1, bitIndex=7, byteIndex=0;
+    for(var col=this.moduleCount-1; col>0; col-=2){
+      if(col===6) col--;
+      while(true){
+        for(var c=0;c<2;c++){
+          if(this.modules[row][col-c]==null){
+            var dark=false;
+            if(byteIndex<data.length) dark=(((data[byteIndex]>>>bitIndex)&1)===1);
+            var mask=QRUtil.getMask(maskPattern,row,col-c);
+            if(mask) dark=!dark;
+            this.modules[row][col-c]=dark;
+            bitIndex--;
+            if(bitIndex===-1){ byteIndex++; bitIndex=7; }
+          }
+        }
+        row+=inc;
+        if(row<0||this.moduleCount<=row){ row-=inc; inc=-inc; break; }
+      }
+    }
+  }
+};
+QRCodeModel.createData=function(typeNumber,errorCorrectLevel,dataList){
+  var rsBlocks=getRSBlocks(typeNumber,errorCorrectLevel);
+  var buffer=new QRBitBuffer();
+  for(var i=0;i<dataList.length;i++){
+    var d=dataList[i];
+    buffer.put(d.mode,4);
+    buffer.put(d.getLength(),QRUtil.getLengthInBits(d.mode,typeNumber));
+    d.write(buffer);
+  }
+  var totalDataCount=0;
+  for(var i=0;i<rsBlocks.length;i++) totalDataCount+=rsBlocks[i].dataCount;
+  if(buffer.getLengthInBits()>totalDataCount*8) throw new Error("code length overflow");
+  if(buffer.getLengthInBits()+4<=totalDataCount*8) buffer.put(0,4);
+  while(buffer.getLengthInBits()%8!==0) buffer.putBit(false);
+  while(true){
+    if(buffer.getLengthInBits()>=totalDataCount*8) break;
+    buffer.put(QRCodeModel.PAD0,8);
+    if(buffer.getLengthInBits()>=totalDataCount*8) break;
+    buffer.put(QRCodeModel.PAD1,8);
+  }
+  return QRCodeModel.createBytes(buffer,rsBlocks);
+};
+QRCodeModel.createBytes=function(buffer,rsBlocks){
+  var offset=0, maxDc=0, maxEc=0;
+  var dcdata=new Array(rsBlocks.length), ecdata=new Array(rsBlocks.length);
+  for(var r=0;r<rsBlocks.length;r++){
+    var dcCount=rsBlocks[r].dataCount, ecCount=rsBlocks[r].totalCount-dcCount;
+    maxDc=Math.max(maxDc,dcCount); maxEc=Math.max(maxEc,ecCount);
+    dcdata[r]=new Array(dcCount);
+    for(var i=0;i<dcdata[r].length;i++) dcdata[r][i]=0xff&buffer.buffer[i+offset];
+    offset+=dcCount;
+    var rsPoly=QRUtil.getErrorCorrectPolynomial(ecCount);
+    var rawPoly=new QRPolynomial(dcdata[r], rsPoly.getLength()-1);
+    var modPoly=rawPoly.mod(rsPoly);
+    ecdata[r]=new Array(rsPoly.getLength()-1);
+    for(var i=0;i<ecdata[r].length;i++){
+      var mi=i+modPoly.getLength()-ecdata[r].length;
+      ecdata[r][i]=(mi>=0)?modPoly.get(mi):0;
+    }
+  }
+  var totalCodeCount=0;
+  for(var i=0;i<rsBlocks.length;i++) totalCodeCount+=rsBlocks[i].totalCount;
+  var data=new Array(totalCodeCount), index=0;
+  for(var i=0;i<maxDc;i++) for(var r=0;r<rsBlocks.length;r++) if(i<dcdata[r].length) data[index++]=dcdata[r][i];
+  for(var i=0;i<maxEc;i++) for(var r=0;r<rsBlocks.length;r++) if(i<ecdata[r].length) data[index++]=ecdata[r][i];
+  return data;
+};
+
+// Pick the smallest QR version that fits `byteLength` data bytes at the given ECC.
+// Avoids the expensive trial-and-error of building up to 40 full QR matrices.
+function pickType(byteLength, ecl){
+  for(var type=1; type<=40; type++){
+    var rsBlocks = getRSBlocks(type, ecl);
+    var totalDataCount = 0;
+    for(var i=0;i<rsBlocks.length;i++) totalDataCount += rsBlocks[i].dataCount;
+    var lengthBits = QRUtil.getLengthInBits(QRMode.MODE_8BIT_BYTE, type);
+    var neededBits = 4 + lengthBits + byteLength*8;
+    if(neededBits <= totalDataCount*8) return type;
+  }
+  return 0;
+}
+
+// Public: encode text at a given ECC, auto-selecting the smallest version 1..40.
+function encodeQR(text, eccLetter){
+  var ecl = {L:QRErrorCorrectLevel.L, M:QRErrorCorrectLevel.M, Q:QRErrorCorrectLevel.Q, H:QRErrorCorrectLevel.H}[eccLetter];
+  var bytes = utf8Bytes(text);
+  var type = pickType(bytes.length, ecl);
+  if(!type) throw new Error("Content too long to encode as a QR code (even at version 40).");
+  var qr = new QRCodeModel(type, ecl);
+  qr.addData(text);
+  qr.make();
+  return qr;
+}
+
+global.QRVoltEncoder = { encodeQR:encodeQR, utf8Bytes:utf8Bytes };
+})(window);
+</script>
+
+<script>
+/* =========================================================================
+   APPLICATION LOGIC
+   ========================================================================= */
+(function(){
+"use strict";
+
+/* ---------- error safety net ---------- */
+window.onerror = function(msg, src, line, col, err){
+  showToast("Error: " + msg + " (line " + line + ")", "err");
+  return false;
+};
+window.addEventListener("unhandledrejection", function(e){
+  showToast("Error: " + (e.reason && e.reason.message ? e.reason.message : e.reason), "err");
+});
+
+function $(sel){ return document.querySelector(sel); }
+function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ---------- toasts ---------- */
+function showToast(msg, kind){
+  var t=document.createElement("div");
+  t.className="toast"+(kind==="err"?" err":kind==="ok"?" ok":"");
+  t.textContent=msg;
+  $("#toasts").appendChild(t);
+  setTimeout(function(){ t.style.opacity="0"; t.style.transform="translateX(20px)"; t.style.transition=".3s"; setTimeout(function(){ t.remove(); },300); }, 3600);
+}
+
+/* ---------- state ---------- */
+var state = {
+  activeTab:"url",
+  colorA:"#111111", bgColor:"#ffffff",
+  useGradient:false, colorA2:"#8b5cf6", colorM:"#ec4899", colorB2:"#22d3ee",
+  gradientType:"linear", gradientAngle:45,
+  transparentBg:false,
+  moduleStyle:"square", eyeStyle:"square",
+  eyeOuterColor:"#111111", eyeInnerColor:"#111111",
+  size:512, quietZone:4, ecc:"H",
+  logoEnable:false, logoSource:"volt", logoImage:null, logoSize:24, logoPlate:true,
+  logoPos:"none",
+  pngScale:1,
+  caption:"", captionPos:"none", captionSize:9, captionStyle:"plain",
+  brandTop:false
+};
+
+var currentQR = null; // last QRCodeModel
+var jsQRAvailable = false;
+var renderDebounce = null;
+
+/* ---------- tabs ---------- */
+$all("#contentTabs .tab-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    $all("#contentTabs .tab-btn").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    state.activeTab = btn.dataset.tab;
+    $all(".tab-panel").forEach(function(p){ p.classList.remove("active"); });
+    $('.tab-panel[data-panel="'+state.activeTab+'"]').classList.add("active");
+    scheduleRender();
+  });
+});
+
+/* ---------- payload builders ---------- */
+function escWifi(s){ return String(s||"").replace(/([\\;,:"])/g, "\\$1"); }
+
+function buildPayload(){
+  switch(state.activeTab){
+    case "url": {
+      var v = $("#urlInput").value.trim() || "example.com";
+      if(!/^[a-zA-Z][a-zA-Z0-9+.\-]*:\/\//.test(v)) v = "https://" + v.replace(/^\/+/, "");
+      return v;
+    }
+    case "text":
+      return $("#textInput").value || "";
+    case "wifi": {
+      var ssid = $("#wifiSsid").value || "";
+      var enc = $("#wifiEnc").value;
+      var pass = $("#wifiPass").value || "";
+      var hidden = $("#wifiHidden").checked;
+      var t = enc === "nopass" ? "nopass" : enc;
+      var body = "WIFI:T:" + t + ";S:" + escWifi(ssid) + ";";
+      if(enc !== "nopass") body += "P:" + escWifi(pass) + ";";
+      if(hidden) body += "H:true;";
+      body += ";";
+      return body;
+    }
+    case "email": {
+      var to = $("#emailTo").value.trim();
+      var subj = encodeURIComponent($("#emailSubject").value || "");
+      var body = encodeURIComponent($("#emailBody").value || "");
+      var q = [];
+      if(subj) q.push("subject=" + subj);
+      if(body) q.push("body=" + body);
+      return "mailto:" + to + (q.length ? "?" + q.join("&") : "");
+    }
+    case "vcard": {
+      var name = $("#vName").value || "";
+      var org = $("#vOrg").value || "";
+      var phone = $("#vPhone").value || "";
+      var email = $("#vEmail").value || "";
+      var url = $("#vUrl").value || "";
+      var lines = ["BEGIN:VCARD","VERSION:3.0"];
+      lines.push("N:" + name);
+      lines.push("FN:" + name);
+      if(org) lines.push("ORG:" + org);
+      if(phone) lines.push("TEL;TYPE=CELL:" + phone);
+      if(email) lines.push("EMAIL:" + email);
+      if(url) lines.push("URL:" + (/^[a-zA-Z]+:\/\//.test(url) ? url : "https://" + url));
+      lines.push("END:VCARD");
+      return lines.join("\n");
+    }
+    case "sms": {
+      var sp = $("#smsPhone").value.trim();
+      var sb = $("#smsBody").value || "";
+      return "SMSTO:" + sp + ":" + sb;
+    }
+    case "phone": {
+      var pn = $("#phoneNum").value.trim();
+      return "tel:" + pn;
+    }
+    case "geo": {
+      var lat = $("#geoLat").value.trim();
+      var lng = $("#geoLng").value.trim();
+      var gq = $("#geoQ").value.trim();
+      if(!lat || !lng) return "geo:0,0";
+      var g = "geo:" + lat + "," + lng;
+      if(gq) g += "?q=" + encodeURIComponent(gq);
+      return g;
+    }
+    case "event": {
+      var title = $("#evTitle").value || "Event";
+      var start = fmtDate($("#evStart").value);
+      var end = fmtDate($("#evEnd").value);
+      var loc = $("#evLoc").value || "";
+      var desc = $("#evDesc").value || "";
+      if(!start) return "https://example.com";
+      var el = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//QRVolt//EN","BEGIN:VEVENT"];
+      el.push("SUMMARY:" + title);
+      el.push("DTSTART:" + start);
+      el.push("DTEND:" + (end || start));
+      if(loc) el.push("LOCATION:" + loc);
+      if(desc) el.push("DESCRIPTION:" + desc.replace(/\n/g, "\\n"));
+      el.push("END:VEVENT","END:VCALENDAR");
+      return el.join("\n");
+    }
+    case "whatsapp": {
+      var wp = $("#waPhone").value.trim().replace(/[^\d]/g,"");
+      var wm = $("#waMsg").value.trim();
+      return "https://wa.me/" + wp + (wm ? "?text=" + encodeURIComponent(wm) : "");
+    }
+    case "paypal": {
+      var pu = $("#ppUser").value.trim();
+      var pa = $("#ppAmount").value.trim();
+      var pc = $("#ppCur").value.trim();
+      var q = [];
+      if(pa) q.push("amount=" + encodeURIComponent(pa));
+      if(pc) q.push("currency_code=" + encodeURIComponent(pc));
+      return "https://paypal.me/" + pu + (q.length ? "?" + q.join("&") : "");
+    }
+    case "crypto": {
+      var coin = $("#crCoin").value;
+      var addr = $("#crAddr").value.trim();
+      var amt = $("#crAmount").value.trim();
+      return coin + ":" + addr + (amt ? "?amount=" + encodeURIComponent(amt) : "");
+    }
+    case "pdf": {
+      var pu = $("#pdfUrl").value.trim();
+      if(!pu) return "https://example.com";
+      return /^https?:\/\//i.test(pu) ? pu : "https://" + pu.replace(/^\/+/, "");
+    }
+    case "app": {
+      var plat = $("#appPlat").value;
+      var aid = $("#appId").value.trim();
+      if(!aid) return "https://example.com";
+      if(plat === "google") return "https://play.google.com/store/apps/details?id=" + encodeURIComponent(aid);
+      if(plat === "apple") return "https://apps.apple.com/app/id" + encodeURIComponent(aid.replace(/[^0-9]/g, ""));
+      return /^https?:\/\//i.test(aid) ? aid : "https://" + aid.replace(/^\/+/, "");
+    }
+    case "multiurl":
+    case "social": {
+      var lines = ($("#" + (type === "multiurl" ? "multiUrls" : "socialUrls")).value || "").split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
+      var first = lines[0] || "https://example.com";
+      return /^https?:\/\//i.test(first) ? first : "https://" + first.replace(/^\/+/, "");
+    }
+  }
+  return "";
+}
+
+function fmtDate(s){
+  s = (s||"").trim();
+  var d = s.replace(/[^\d]/g, "").slice(0,8);
+  if(d.length < 8) return "";
+  return d.slice(0,4) + d.slice(4,6) + d.slice(6,8);
+}
+
+/* ---------- design studio wiring ---------- */
+function syncColorPair(colorInput, hexInput, key){
+  colorInput.addEventListener("input", function(){ hexInput.value = colorInput.value; state[key] = colorInput.value; scheduleRender(); });
+  hexInput.addEventListener("change", function(){
+    var v = hexInput.value.trim();
+    if(/^#[0-9a-fA-F]{6}$/.test(v)){ colorInput.value = v; state[key] = v; scheduleRender(); }
+    else { hexInput.value = colorInput.value; }
+  });
+}
+syncColorPair($("#colorA"), $("#colorAHex"), "colorA");
+syncColorPair($("#bgColor"), $("#bgColorHex"), "bgColor");
+
+$("#gradientToggle").addEventListener("change", function(e){
+  state.useGradient = e.target.checked;
+  $("#gradientRow").style.display = state.useGradient ? "block" : "none";
+  scheduleRender();
+});
+$("#colorA2").addEventListener("input", function(e){ state.colorA2 = e.target.value; scheduleRender(); });
+$("#colorM").addEventListener("input", function(e){ state.colorM = e.target.value; scheduleRender(); });
+$("#colorB2").addEventListener("input", function(e){ state.colorB2 = e.target.value; scheduleRender(); });
+$("#gradientType").addEventListener("change", function(e){
+  state.gradientType = e.target.value;
+  $("#gradientAngleWrap").style.display = state.gradientType === "radial" ? "none" : "block";
+  scheduleRender();
+});
+$("#gradientAngle").addEventListener("input", function(e){
+  state.gradientAngle = parseInt(e.target.value,10);
+  $("#gradientAngleVal").textContent = state.gradientAngle + "°";
+  scheduleRender();
+});
+$("#transparentBg").addEventListener("change", function(e){ state.transparentBg = e.target.checked; scheduleRender(); });
+$("#eyeOuterColor").addEventListener("input", function(e){ state.eyeOuterColor = e.target.value; scheduleRender(); });
+$("#eyeInnerColor").addEventListener("input", function(e){ state.eyeInnerColor = e.target.value; scheduleRender(); });
+
+function wireSeg(id, key){
+  var seg = $(id);
+  seg.querySelectorAll("button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      seg.querySelectorAll("button").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      state[key] = btn.dataset.val;
+      scheduleRender();
+    });
+  });
+}
+wireSeg("#moduleStyleSeg", "moduleStyle");
+wireSeg("#eyeStyleSeg", "eyeStyle");
+wireSeg("#eccSeg", "ecc");
+wireSeg("#pngScaleSeg", "pngScale");
+
+$("#sizeSlider").addEventListener("input", function(e){
+  state.size = parseInt(e.target.value, 10);
+  $("#sizeVal").textContent = state.size + "px";
+  scheduleRender();
+});
+$("#quietZoneSlider").addEventListener("input", function(e){
+  state.quietZone = parseInt(e.target.value,10);
+  $("#quietZoneVal").textContent = state.quietZone + " modules";
+  scheduleRender();
+});
+$("#captionText").addEventListener("input", function(e){ state.caption = e.target.value; scheduleRender(); });
+$("#captionPos").addEventListener("change", function(e){ state.captionPos = e.target.value; scheduleRender(); });
+$("#captionSize").addEventListener("input", function(e){ state.captionSize = parseInt(e.target.value,10); $("#captionSizeVal").textContent = state.captionSize + "%"; scheduleRender(); });
+$("#captionStyle").addEventListener("change", function(e){ state.captionStyle = e.target.value; scheduleRender(); });
+
+/* presets & randomizer */
+var PRESETS = {
+  classic: {colorA:"#111111", bgColor:"#ffffff", useGradient:false, colorA2:"#111111", colorM:"#111111", colorB2:"#111111", eyeOuterColor:"#111111", eyeInnerColor:"#111111", moduleStyle:"square", eyeStyle:"square"},
+  volt: {colorA:"#111111", bgColor:"#ffffff", useGradient:true, colorA2:"#8b5cf6", colorM:"#3b82f6", colorB2:"#22d3ee", eyeOuterColor:"#8b5cf6", eyeInnerColor:"#22d3ee", moduleStyle:"dots", eyeStyle:"circle"},
+  midnight: {colorA:"#e5edff", bgColor:"#0b1224", useGradient:false, colorA2:"#3b82f6", colorM:"#3b82f6", colorB2:"#3b82f6", eyeOuterColor:"#3b82f6", eyeInnerColor:"#e5edff", moduleStyle:"rounded", eyeStyle:"rounded"},
+  sunset: {colorA:"#7c2d12", bgColor:"#fff7ed", useGradient:true, colorA2:"#f97316", colorM:"#fb923c", colorB2:"#db2777", eyeOuterColor:"#db2777", eyeInnerColor:"#f97316", moduleStyle:"rounded", eyeStyle:"circle"}
+};
+function applyPreset(p){
+  Object.assign(state, p);
+  $("#colorA").value = state.colorA; $("#colorAHex").value = state.colorA;
+  $("#bgColor").value = state.bgColor; $("#bgColorHex").value = state.bgColor;
+  $("#gradientToggle").checked = state.useGradient;
+  $("#gradientRow").style.display = state.useGradient ? "block" : "none";
+  $("#colorA2").value = state.colorA2; $("#colorM").value = state.colorM; $("#colorB2").value = state.colorB2;
+  $("#gradientType").value = state.gradientType;
+  $("#gradientAngle").value = state.gradientAngle; $("#gradientAngleVal").textContent = state.gradientAngle + "°";
+  $("#gradientAngleWrap").style.display = state.gradientType === "radial" ? "none" : "block";
+  $("#transparentBg").checked = state.transparentBg;
+  $("#eyeOuterColor").value = state.eyeOuterColor; $("#eyeInnerColor").value = state.eyeInnerColor;
+  setSegActive("#moduleStyleSeg", state.moduleStyle);
+  setSegActive("#eyeStyleSeg", state.eyeStyle);
+  scheduleRender();
+}
+function setSegActive(id, val){
+  var seg=$(id);
+  seg.querySelectorAll("button").forEach(function(b){ b.classList.toggle("active", b.dataset.val===val); });
+}
+$all("#presetChips .chip[data-preset]").forEach(function(chip){
+  chip.addEventListener("click", function(){ applyPreset(PRESETS[chip.dataset.preset]); showToast("Preset applied: " + chip.dataset.preset, "ok"); });
+});
+function randHex(){ return "#" + Math.floor(Math.random()*0xffffff).toString(16).padStart(6,"0"); }
+$("#randomizeBtn").addEventListener("click", function(){
+  var styles=["square","rounded","dots","classy","bars","diamond"], eyes=["square","rounded","circle"];
+  var p = {
+    colorA: randHex(), bgColor: Math.random()>0.7 ? randHex() : "#ffffff",
+    useGradient: Math.random()>0.4, colorA2: randHex(), colorM: randHex(), colorB2: randHex(),
+    eyeOuterColor: randHex(), eyeInnerColor: randHex(),
+    moduleStyle: styles[Math.floor(Math.random()*styles.length)],
+    eyeStyle: eyes[Math.floor(Math.random()*eyes.length)]
+  };
+  applyPreset(p);
+  showToast("Randomized 🎲", "ok");
+});
+
+/* ---------- custom presets (persisted) ---------- */
+var CUSTOM_PRESET_KEY = "qrvolt_custom_presets_v1";
+function getCustomPresets(){ try{ return JSON.parse(localStorage.getItem(CUSTOM_PRESET_KEY) || "[]"); }catch(e){ return []; } }
+function setCustomPresets(list){ localStorage.setItem(CUSTOM_PRESET_KEY, JSON.stringify(list)); }
+function captureDesign(){
+  return {
+    colorA: state.colorA, bgColor: state.bgColor,
+    useGradient: state.useGradient, colorA2: state.colorA2, colorM: state.colorM, colorB2: state.colorB2,
+    gradientType: state.gradientType, gradientAngle: state.gradientAngle,
+    transparentBg: state.transparentBg,
+    eyeOuterColor: state.eyeOuterColor, eyeInnerColor: state.eyeInnerColor,
+    moduleStyle: state.moduleStyle, eyeStyle: state.eyeStyle
+  };
+}
+function renderCustomPresets(){
+  var list = getCustomPresets();
+  var wrap = $("#customPresetChips");
+  wrap.innerHTML = "";
+  list.forEach(function(p, idx){
+    var chip = document.createElement("button");
+    chip.className = "chip";
+    chip.innerHTML = '<span class="dot" style="background:'+(p.useGradient?("linear-gradient(90deg,"+p.colorA2+","+p.colorB2+")"):p.colorA)+'"></span>'+(p.name||("Custom "+(idx+1)));
+    var del = document.createElement("span");
+    del.textContent = " ✕"; del.style.cssText = "color:var(--danger);cursor:pointer;";
+    del.addEventListener("click", function(e){
+      e.stopPropagation();
+      var cur = getCustomPresets(); cur.splice(idx,1); setCustomPresets(cur); renderCustomPresets();
+    });
+    chip.appendChild(del);
+    chip.addEventListener("click", function(){ applyPreset(p); showToast("Preset applied: "+(p.name||("Custom "+(idx+1))), "ok"); });
+    wrap.appendChild(chip);
+  });
+}
+$("#savePresetBtn").addEventListener("click", function(){
+  var list = getCustomPresets();
+  var name = "Custom " + (list.length + 1);
+  var p = captureDesign(); p.name = name;
+  list.push(p); setCustomPresets(list); renderCustomPresets();
+  showToast("Saved preset: " + name, "ok");
+});
+renderCustomPresets();
+
+/* ---------- color palettes ---------- */
+var PALETTES = [
+  {name:"Neon",   colorA:"#a3e635", bgColor:"#0b1020", eyeOuterColor:"#22d3ee", eyeInnerColor:"#a3e635", useGradient:true, colorA2:"#22d3ee", colorM:"#a855f7", colorB2:"#ec4899", eyeStyle:"circle", moduleStyle:"dots"},
+  {name:"Sunset",  colorA:"#fb7185", bgColor:"#fff7ed", eyeOuterColor:"#db2777", eyeInnerColor:"#f97316", useGradient:true, colorA2:"#f97316", colorM:"#fb7185", colorB2:"#db2777", eyeStyle:"circle", moduleStyle:"rounded"},
+  {name:"Ocean",   colorA:"#0e7490", bgColor:"#ecfeff", eyeOuterColor:"#0891b2", eyeInnerColor:"#0e7490", useGradient:true, colorA2:"#0891b2", colorM:"#06b6d4", colorB2:"#22d3ee", eyeStyle:"rounded", moduleStyle:"rounded"},
+  {name:"Forest",  colorA:"#166534", bgColor:"#f0fdf4", eyeOuterColor:"#15803d", eyeInnerColor:"#22c55e", useGradient:true, colorA2:"#16a34a", colorM:"#4ade80", colorB2:"#a3e635", eyeStyle:"square", moduleStyle:"square"},
+  {name:"Candy",   colorA:"#db2777", bgColor:"#fdf2f8", eyeOuterColor:"#7c3aed", eyeInnerColor:"#db2777", useGradient:true, colorA2:"#7c3aed", colorM:"#ec4899", colorB2:"#f472b6", eyeStyle:"circle", moduleStyle:"dots"},
+  {name:"Mono",    colorA:"#111111", bgColor:"#ffffff", eyeOuterColor:"#111111", eyeInnerColor:"#111111", useGradient:false, colorA2:"#111111", colorM:"#111111", colorB2:"#111111", eyeStyle:"square", moduleStyle:"square"},
+  {name:"Gold",    colorA:"#713f12", bgColor:"#fffbeb", eyeOuterColor:"#b45309", eyeInnerColor:"#f59e0b", useGradient:true, colorA2:"#f59e0b", colorM:"#fcd34d", colorB2:"#b45309", eyeStyle:"rounded", moduleStyle:"rounded"},
+  {name:"Ice",     colorA:"#1e3a8a", bgColor:"#f0f9ff", eyeOuterColor:"#2563eb", eyeInnerColor:"#38bdf8", useGradient:true, colorA2:"#2563eb", colorM:"#38bdf8", colorB2:"#a5f3fc", eyeStyle:"rounded", moduleStyle:"dots"}
+];
+function renderPalettes(){
+  var wrap = $("#paletteChips");
+  wrap.innerHTML = "";
+  PALETTES.forEach(function(p){
+    var chip = document.createElement("button");
+    chip.className = "chip";
+    var swatch = "linear-gradient(90deg,"+p.colorA2+","+p.colorM+","+p.colorB2+")";
+    chip.innerHTML = '<span class="dot" style="background:'+(p.useGradient?swatch:p.colorA)+'"></span>'+p.name;
+    chip.addEventListener("click", function(){ applyPreset(p); showToast("Palette applied: "+p.name, "ok"); });
+    wrap.appendChild(chip);
+  });
+}
+renderPalettes();
+
+/* ---------- logo ---------- */
+$all("#logoPosSeg button").forEach(function(b){
+  b.addEventListener("click", function(){
+    setSegActive("#logoPosSeg", b.dataset.val);
+    state.logoPos = b.dataset.val;
+    state.logoEnable = (state.logoPos === "center");
+    state.brandTop = (state.logoPos === "top");
+    $("#logoControls").style.display = (state.logoPos === "none") ? "none" : "block";
+    if(state.logoPos !== "none" && state.ecc !== "H"){
+      setSegActive("#eccSeg","H"); state.ecc="H";
+      showToast("Switched ECC to H for logo reliability", "info");
+    }
+    scheduleRender();
+  });
+});
+wireSeg("#logoSourceSeg", "logoSource");
+$("#logoSourceSeg").addEventListener("click", function(){ $("#logoUploadRow").style.display = state.logoSource==="custom" ? "block" : "none"; });
+$("#logoSize").addEventListener("input", function(e){ state.logoSize = parseInt(e.target.value,10); $("#logoSizeVal").textContent = state.logoSize + "%"; scheduleRender(); });
+$("#logoPlate").addEventListener("change", function(e){ state.logoPlate = e.target.checked; scheduleRender(); });
+
+$("#logoDrop").addEventListener("click", function(){ $("#logoFile").click(); });
+$("#logoDrop").addEventListener("dragover", function(e){ e.preventDefault(); });
+$("#logoDrop").addEventListener("drop", function(e){ e.preventDefault(); if(e.dataTransfer.files[0]) handleLogoFile(e.dataTransfer.files[0]); });
+$("#logoFile").addEventListener("change", function(e){ if(e.target.files[0]) handleLogoFile(e.target.files[0]); });
+function handleLogoFile(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      state.logoImage = img;
+      state.logoImageDataUrl = reader.result;
+      $("#logoPreview").src = reader.result;
+      $("#logoPreviewWrap").style.display = "block";
+      scheduleRender();
+    };
+    img.onerror = function(){ showToast("Couldn't load that image.", "err"); };
+    img.src = reader.result;
+  };
+  reader.onerror = function(){ showToast("Couldn't read that file.", "err"); };
+  reader.readAsDataURL(file);
+}
+
+/* ---------- built-in volt logo (drawn programmatically) ---------- */
+function drawVoltLogo(ctx, x, y, w, h){
+  var g = ctx.createLinearGradient(x, y, x+w, y+h);
+  g.addColorStop(0, "#8b5cf6"); g.addColorStop(0.5, "#3b82f6"); g.addColorStop(1, "#22d3ee");
+  roundRectPath(ctx, x, y, w, h, w*0.22);
+  ctx.fillStyle = g; ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  var cx=x+w/2, cy=y+h/2, s=Math.min(w,h);
+  ctx.moveTo(cx+0.10*s, cy-0.32*s);
+  ctx.lineTo(cx-0.22*s, cy+0.06*s);
+  ctx.lineTo(cx-0.02*s, cy+0.06*s);
+  ctx.lineTo(cx-0.10*s, cy+0.32*s);
+  ctx.lineTo(cx+0.22*s, cy-0.08*s);
+  ctx.lineTo(cx+0.02*s, cy-0.08*s);
+  ctx.closePath();
+  ctx.fill();
+}
+function voltLogoSvg(x,y,w,h){
+  var id = "voltgrad";
+  var cx=x+w/2, cy=y+h/2, s=Math.min(w,h);
+  var pts = [
+    [cx+0.10*s, cy-0.32*s],[cx-0.22*s, cy+0.06*s],[cx-0.02*s, cy+0.06*s],
+    [cx-0.10*s, cy+0.32*s],[cx+0.22*s, cy-0.08*s],[cx+0.02*s, cy-0.08*s]
+  ].map(function(p){ return p[0].toFixed(2)+","+p[1].toFixed(2); }).join(" ");
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(w*0.22).toFixed(2)+'" fill="url(#'+id+')"/>' +
+         '<polygon points="'+pts+'" fill="#ffffff"/>';
+}
+
+/* ---------- geometry helpers ---------- */
+function roundRectPath(ctx, x, y, w, h, r){
+  r = Math.min(r, w/2, h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+function inEyeZone(row, col, mc){
+  return (row<7 && col<7) || (row<7 && col>=mc-7) || (row>=mc-7 && col<7);
+}
+
+/* ---------- core render ---------- */
+function computeMeta(qr, payload){
+  return {
+    version: qr.typeNumber,
+    modules: qr.getModuleCount() + "×" + qr.getModuleCount(),
+    ecc: state.ecc,
+    bytes: QRVoltEncoder.utf8Bytes(payload).length
+  };
+}
+
+function luminance(hex){
+  var c = hex.replace("#","");
+  var r=parseInt(c.substr(0,2),16)/255, g=parseInt(c.substr(2,2),16)/255, b=parseInt(c.substr(4,2),16)/255;
+  [r,g,b] = [r,g,b].map(function(v){ return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); });
+  return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+function contrastRatio(hex1, hex2){
+  var L1 = luminance(hex1), L2 = luminance(hex2);
+  var lighter = Math.max(L1,L2), darker = Math.min(L1,L2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function drawQRToCanvas(canvas, qr, opts){
+  opts = opts || {};
+  var scale = opts.scale || 1;
+  var size = Math.min(4096, state.size * scale);
+  var mc = qr.getModuleCount();
+  var quiet = state.quietZone;
+  var total = mc + quiet*2;
+  var moduleSize = size / total;
+
+  var brandH = state.brandTop ? Math.round(size * 0.14) : 0;
+  var capPos = (state.brandTop && state.captionPos === "top") ? "bottom" : state.captionPos;
+  var capOn = !!(state.caption && capPos !== "none");
+  var capFont = Math.max(8, Math.round(size * state.captionSize/100));
+  var capH = capOn ? Math.round(capFont * 1.9) : 0;
+  var topCap = (capPos === "top" && capOn) ? capH : 0;
+  var bottomCap = (capPos === "bottom" && capOn) ? capH : 0;
+  var topOffset = brandH + topCap;
+
+  canvas.width = size; canvas.height = size + brandH + topCap + bottomCap;
+  var ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,size,canvas.height);
+
+  if(!state.transparentBg || opts.forceBg){
+    ctx.fillStyle = state.bgColor;
+    ctx.fillRect(0,0,size,canvas.height);
+  }
+
+  ctx.save();
+  ctx.translate(0, topOffset);
+
+  var fillStyle;
+  if(state.useGradient){
+    var grad;
+    if(state.gradientType === "radial"){
+      grad = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+      grad.addColorStop(0, state.colorA2);
+      grad.addColorStop(0.5, state.colorM);
+      grad.addColorStop(1, state.colorB2);
+    } else {
+      var a = state.gradientAngle*Math.PI/180;
+      var dx = Math.cos(a), dy = Math.sin(a);
+      grad = ctx.createLinearGradient(size/2 - dx*size/2, size/2 - dy*size/2, size/2 + dx*size/2, size/2 + dy*size/2);
+      grad.addColorStop(0, state.colorA2);
+      grad.addColorStop(0.5, state.colorM);
+      grad.addColorStop(1, state.colorB2);
+    }
+    fillStyle = grad;
+  } else {
+    fillStyle = state.colorA;
+  }
+
+  // module body (excluding eye zones)
+  ctx.fillStyle = fillStyle;
+  for(var row=0; row<mc; row++){
+    for(var col=0; col<mc; col++){
+      if(!qr.isDark(row,col)) continue;
+      if(inEyeZone(row,col,mc)) continue;
+      var x = (col+quiet)*moduleSize, y = (row+quiet)*moduleSize;
+      drawModuleShape(ctx, x, y, moduleSize, state.moduleStyle);
+    }
+  }
+
+  // eyes: three 7x7 finder patterns
+  drawEye(ctx, quiet, quiet, moduleSize);
+  drawEye(ctx, quiet, quiet + (mc-7), moduleSize);
+  drawEye(ctx, quiet + (mc-7), quiet, moduleSize);
+
+  // logo
+  if(state.logoEnable){
+    drawLogoOnCanvas(ctx, size);
+  }
+  ctx.restore();
+
+  if(state.brandTop){
+    var bw = Math.round(size*0.10), bh = bw, bx = (size-bw)/2, by = (brandH-bh)/2;
+    drawVoltLogo(ctx, bx, by, bw, bh);
+  }
+  if(capOn){
+    var capColor = state.useGradient ? state.colorA2 : state.colorA;
+    ctx.font = "600 " + capFont + "px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    var ty = (capPos === "top") ? (brandH + topCap/2) : (brandH + size + bottomCap/2);
+    if(state.captionStyle === "pill"){
+      var tw = ctx.measureText(state.caption).width;
+      var pw = Math.min(size*0.92, tw + capFont*1.7);
+      var ph = Math.min(capH*0.82, capFont*1.55);
+      ctx.fillStyle = capColor;
+      roundRectPath(ctx, (size-pw)/2, ty-ph/2, pw, ph, ph/2);
+      ctx.fill();
+      ctx.fillStyle = state.transparentBg ? "#ffffff" : state.bgColor;
+      ctx.fillText(state.caption, size/2, ty + capFont*0.04);
+    } else {
+      ctx.fillStyle = capColor;
+      ctx.fillText(state.caption, size/2, ty);
+    }
+  }
+}
+
+function drawModuleShape(ctx, x, y, s, style){
+  if(style === "square"){
+    ctx.fillRect(x, y, s, s);
+  } else if(style === "rounded"){
+    roundRectPath(ctx, x+s*0.06, y+s*0.06, s*0.88, s*0.88, s*0.28);
+    ctx.fill();
+  } else if(style === "dots"){
+    ctx.beginPath();
+    ctx.arc(x+s/2, y+s/2, s*0.42, 0, Math.PI*2);
+    ctx.fill();
+  } else if(style === "classy"){
+    roundRectPath(ctx, x+s*0.14, y+s*0.14, s*0.72, s*0.72, s*0.22);
+    ctx.fill();
+  } else if(style === "bars"){
+    ctx.fillRect(x+s*0.30, y, s*0.40, s);
+  } else { // diamond
+    ctx.beginPath();
+    ctx.moveTo(x+s/2, y+s*0.08);
+    ctx.lineTo(x+s*0.92, y+s/2);
+    ctx.lineTo(x+s/2, y+s*0.92);
+    ctx.lineTo(x+s*0.08, y+s/2);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function drawEye(ctx, rowOff, colOff, moduleSize){
+  var outerPx = 7*moduleSize;
+  var x = colOff*moduleSize, y = rowOff*moduleSize;
+  var style = state.eyeStyle;
+
+  ctx.fillStyle = state.eyeOuterColor;
+  if(style === "square"){
+    ctx.fillRect(x,y,outerPx,outerPx);
+  } else if(style === "rounded"){
+    roundRectPath(ctx, x, y, outerPx, outerPx, outerPx*0.28); ctx.fill();
+  } else {
+    ctx.beginPath(); ctx.arc(x+outerPx/2, y+outerPx/2, outerPx/2, 0, Math.PI*2); ctx.fill();
+  }
+
+  // cut the ring: knock out the 5x5 hole with background color, then inner 3x3
+  var holeSize = 5*moduleSize, holeX = x+moduleSize, holeY = y+moduleSize;
+  ctx.fillStyle = state.transparentBg ? "#ffffff" : state.bgColor;
+  if(state.transparentBg){
+    ctx.save(); ctx.globalCompositeOperation="destination-out";
+    if(style==="square") ctx.fillRect(holeX,holeY,holeSize,holeSize);
+    else if(style==="rounded"){ roundRectPath(ctx,holeX,holeY,holeSize,holeSize,holeSize*0.28); ctx.fill(); }
+    else { ctx.beginPath(); ctx.arc(holeX+holeSize/2, holeY+holeSize/2, holeSize/2, 0, Math.PI*2); ctx.fill(); }
+    ctx.restore();
+  } else {
+    if(style==="square") ctx.fillRect(holeX,holeY,holeSize,holeSize);
+    else if(style==="rounded"){ roundRectPath(ctx,holeX,holeY,holeSize,holeSize,holeSize*0.28); ctx.fill(); }
+    else { ctx.beginPath(); ctx.arc(holeX+holeSize/2, holeY+holeSize/2, holeSize/2, 0, Math.PI*2); ctx.fill(); }
+  }
+
+  var innerSize = 3*moduleSize, innerX = x+2*moduleSize, innerY = y+2*moduleSize;
+  ctx.fillStyle = state.eyeInnerColor;
+  if(style==="square") ctx.fillRect(innerX,innerY,innerSize,innerSize);
+  else if(style==="rounded"){ roundRectPath(ctx,innerX,innerY,innerSize,innerSize,innerSize*0.28); ctx.fill(); }
+  else { ctx.beginPath(); ctx.arc(innerX+innerSize/2, innerY+innerSize/2, innerSize/2, 0, Math.PI*2); ctx.fill(); }
+}
+
+function drawLogoOnCanvas(ctx, canvasSize){
+  var frac = state.logoSize/100;
+  var w = canvasSize*frac, h = canvasSize*frac;
+  var x = (canvasSize-w)/2, y = (canvasSize-h)/2;
+  if(state.logoPlate){
+    var pad = w*0.14;
+    ctx.fillStyle = state.transparentBg ? "#ffffff" : state.bgColor;
+    roundRectPath(ctx, x-pad, y-pad, w+pad*2, h+pad*2, (w+pad*2)*0.2);
+    ctx.fill();
+  }
+  if(state.logoSource === "custom" && state.logoImage){
+    ctx.drawImage(state.logoImage, x, y, w, h);
+  } else {
+    drawVoltLogo(ctx, x, y, w, h);
+  }
+}
+
+/* ---------- SVG export ---------- */
+function buildSvg(qr){
+  var mc = qr.getModuleCount();
+  var quiet = state.quietZone;
+  var total = mc + quiet*2;
+  var vb = 1000;
+  var moduleSize = vb/total;
+
+  var brandH = state.brandTop ? Math.round(vb * 0.14) : 0;
+  var capPos = (state.brandTop && state.captionPos === "top") ? "bottom" : state.captionPos;
+  var capOn = !!(state.caption && capPos !== "none");
+  var capFont = Math.max(8, Math.round(vb * state.captionSize/100));
+  var capH = capOn ? Math.round(capFont * 1.9) : 0;
+  var topCap = (capPos === "top" && capOn) ? capH : 0;
+  var bottomCap = (capPos === "bottom" && capOn) ? capH : 0;
+  var topOffset = brandH + topCap;
+  var totalCap = brandH + topCap + bottomCap;
+
+  var defs = "";
+  var fill = state.colorA;
+  if(state.useGradient){
+    if(state.gradientType === "radial"){
+      defs += '<radialGradient id="modGrad" cx="500" cy="500" r="500" gradientUnits="userSpaceOnUse">' +
+        '<stop offset="0%" stop-color="'+state.colorA2+'"/><stop offset="50%" stop-color="'+state.colorM+'"/><stop offset="100%" stop-color="'+state.colorB2+'"/></radialGradient>';
+    } else {
+      var ga = state.gradientAngle*Math.PI/180;
+      var gdx = Math.cos(ga), gdy = Math.sin(ga);
+      var gx1 = (500 - gdx*500).toFixed(2), gy1 = (500 - gdy*500).toFixed(2);
+      var gx2 = (500 + gdx*500).toFixed(2), gy2 = (500 + gdy*500).toFixed(2);
+      defs += '<linearGradient id="modGrad" x1="'+gx1+'" y1="'+gy1+'" x2="'+gx2+'" y2="'+gy2+'" gradientUnits="userSpaceOnUse">' +
+        '<stop offset="0%" stop-color="'+state.colorA2+'"/><stop offset="50%" stop-color="'+state.colorM+'"/><stop offset="100%" stop-color="'+state.colorB2+'"/></linearGradient>';
+    }
+    fill = "url(#modGrad)";
+  }
+  if(state.logoEnable || state.brandTop){
+    defs += '<linearGradient id="voltgrad" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0%" stop-color="#8b5cf6"/><stop offset="50%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>';
+  }
+
+  var parts = [];
+  parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+vb+' '+(vb+totalCap)+'" width="'+state.size+'" height="'+(state.size*(vb+totalCap)/vb)+'">');
+  parts.push('<defs>'+defs+'</defs>');
+  if(!state.transparentBg){
+    parts.push('<rect x="0" y="0" width="'+vb+'" height="'+(vb+totalCap)+'" fill="'+state.bgColor+'"/>');
+  }
+
+  function shapeSvg(x,y,s,style,fillColor){
+    if(style==="square") return '<rect x="'+x.toFixed(2)+'" y="'+y.toFixed(2)+'" width="'+s.toFixed(2)+'" height="'+s.toFixed(2)+'" fill="'+fillColor+'"/>';
+    if(style==="rounded") return '<rect x="'+(x+s*0.06).toFixed(2)+'" y="'+(y+s*0.06).toFixed(2)+'" width="'+(s*0.88).toFixed(2)+'" height="'+(s*0.88).toFixed(2)+'" rx="'+(s*0.28).toFixed(2)+'" fill="'+fillColor+'"/>';
+    if(style==="dots") return '<circle cx="'+(x+s/2).toFixed(2)+'" cy="'+(y+s/2).toFixed(2)+'" r="'+(s*0.42).toFixed(2)+'" fill="'+fillColor+'"/>';
+    if(style==="classy") return '<rect x="'+(x+s*0.14).toFixed(2)+'" y="'+(y+s*0.14).toFixed(2)+'" width="'+(s*0.72).toFixed(2)+'" height="'+(s*0.72).toFixed(2)+'" rx="'+(s*0.22).toFixed(2)+'" fill="'+fillColor+'"/>';
+    if(style==="bars") return '<rect x="'+(x+s*0.30).toFixed(2)+'" y="'+y.toFixed(2)+'" width="'+(s*0.40).toFixed(2)+'" height="'+s.toFixed(2)+'" fill="'+fillColor+'"/>';
+    // diamond
+    var pts = [
+      (x+s/2).toFixed(2)+","+(y+s*0.08).toFixed(2),
+      (x+s*0.92).toFixed(2)+","+(y+s/2).toFixed(2),
+      (x+s/2).toFixed(2)+","+(y+s*0.92).toFixed(2),
+      (x+s*0.08).toFixed(2)+","+(y+s/2).toFixed(2)
+    ].join(" ");
+    return '<polygon points="'+pts+'" fill="'+fillColor+'"/>';
+  }
+
+  var body = [];
+  for(var row=0; row<mc; row++){
+    for(var col=0; col<mc; col++){
+      if(!qr.isDark(row,col)) continue;
+      if(inEyeZone(row,col,mc)) continue;
+      var x=(col+quiet)*moduleSize, y=(row+quiet)*moduleSize;
+      body.push(shapeSvg(x,y,moduleSize,state.moduleStyle,fill));
+    }
+  }
+  parts.push('<g transform="translate(0,'+topOffset+')">');
+  parts.push('<g>'+body.join("")+'</g>');
+
+  function eyeSvg(rowOff,colOff){
+    var outer=7*moduleSize, x=colOff*moduleSize, y=rowOff*moduleSize;
+    var s = state.eyeStyle;
+    var out = "";
+    var maskId = "eyemask"+rowOff+"_"+colOff;
+    var holeSize=5*moduleSize, holeX=x+moduleSize, holeY=y+moduleSize;
+    out += '<mask id="'+maskId+'"><rect x="'+x+'" y="'+y+'" width="'+outer+'" height="'+outer+'" fill="white"/>';
+    out += (s==="circle" ? '<circle cx="'+(holeX+holeSize/2)+'" cy="'+(holeY+holeSize/2)+'" r="'+(holeSize/2)+'" fill="black"/>'
+      : '<rect x="'+holeX+'" y="'+holeY+'" width="'+holeSize+'" height="'+holeSize+'" rx="'+(s==="rounded"?holeSize*0.28:0)+'" fill="black"/>');
+    out += '</mask>';
+    out += (s==="square" ? '<rect x="'+x+'" y="'+y+'" width="'+outer+'" height="'+outer+'" fill="'+state.eyeOuterColor+'" mask="url(#'+maskId+')"/>'
+      : s==="rounded" ? '<rect x="'+x+'" y="'+y+'" width="'+outer+'" height="'+outer+'" rx="'+(outer*0.28)+'" fill="'+state.eyeOuterColor+'" mask="url(#'+maskId+')"/>'
+      : '<circle cx="'+(x+outer/2)+'" cy="'+(y+outer/2)+'" r="'+(outer/2)+'" fill="'+state.eyeOuterColor+'" mask="url(#'+maskId+')"/>');
+    var innerSize=3*moduleSize, innerX=x+2*moduleSize, innerY=y+2*moduleSize;
+    out += (s==="square" ? '<rect x="'+innerX+'" y="'+innerY+'" width="'+innerSize+'" height="'+innerSize+'" fill="'+state.eyeInnerColor+'"/>'
+      : s==="rounded" ? '<rect x="'+innerX+'" y="'+innerY+'" width="'+innerSize+'" height="'+innerSize+'" rx="'+(innerSize*0.28)+'" fill="'+state.eyeInnerColor+'"/>'
+      : '<circle cx="'+(innerX+innerSize/2)+'" cy="'+(innerY+innerSize/2)+'" r="'+(innerSize/2)+'" fill="'+state.eyeInnerColor+'"/>');
+    return out;
+  }
+  parts.push('<g>'+eyeSvg(quiet,quiet)+eyeSvg(quiet,quiet+(mc-7))+eyeSvg(quiet+(mc-7),quiet)+'</g>');
+
+  if(state.logoEnable){
+    var frac=state.logoSize/100, w=vb*frac, h=vb*frac, x=(vb-w)/2, y=(vb-h)/2;
+    if(state.logoPlate){
+      var pad=w*0.14;
+      parts.push('<rect x="'+(x-pad)+'" y="'+(y-pad)+'" width="'+(w+pad*2)+'" height="'+(h+pad*2)+'" rx="'+((w+pad*2)*0.2)+'" fill="'+(state.transparentBg?"#ffffff":state.bgColor)+'"/>');
+    }
+    if(state.logoSource==="custom" && state.logoImageDataUrl){
+      parts.push('<image x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" href="'+state.logoImageDataUrl+'"/>');
+    } else {
+      parts.push(voltLogoSvg(x,y,w,h));
+    }
+  }
+  parts.push('</g>');
+
+  if(state.brandTop){
+    var bw = Math.round(vb*0.10), bh = bw, bx = (vb-bw)/2, by = (brandH-bh)/2;
+    parts.push(voltLogoSvg(bx,by,bw,bh));
+  }
+  if(capOn){
+    var capColor = state.useGradient ? state.colorA2 : state.colorA;
+    var ty = (capPos === "top") ? (brandH + topCap/2) : (brandH + vb + bottomCap/2);
+    var txtAttr = 'x="500" y="'+ty.toFixed(2)+'" font-family="Arial,Helvetica,sans-serif" font-size="'+capFont+'" font-weight="600" text-anchor="middle" dominant-baseline="middle"';
+    if(state.captionStyle === "pill"){
+      var estW = state.caption.length * capFont * 0.58 + capFont*1.7;
+      var pw = Math.min(vb*0.92, estW);
+      var ph = Math.min(capH*0.82, capFont*1.55);
+      parts.push('<rect x="'+((vb-pw)/2).toFixed(2)+'" y="'+(ty-ph/2).toFixed(2)+'" width="'+pw.toFixed(2)+'" height="'+ph.toFixed(2)+'" rx="'+(ph/2).toFixed(2)+'" fill="'+capColor+'"/>');
+      parts.push('<text '+txtAttr+' fill="'+(state.transparentBg ? "#ffffff" : state.bgColor)+'">'+escapeHtml(state.caption)+'</text>');
+    } else {
+      parts.push('<text '+txtAttr+' fill="'+capColor+'">'+escapeHtml(state.caption)+'</text>');
+    }
+  }
+
+  parts.push('</svg>');
+  return parts.join("");
+}
+
+/* ---------- meta / badges ---------- */
+function updateMeta(qr, payload){
+  var meta = computeMeta(qr, payload);
+  $("#metaVersion").textContent = meta.version;
+  $("#metaModules").textContent = meta.modules;
+  $("#metaEcc").textContent = meta.ecc;
+  $("#metaBytes").textContent = meta.bytes;
+
+  var badgeHtml = "";
+  var cr = contrastRatio(state.useGradient ? state.colorA2 : state.colorA, state.transparentBg ? "#ffffff" : state.bgColor);
+  if(cr < 2){
+    badgeHtml += '<span class="badge warn">⚠ Low contrast ('+cr.toFixed(2)+':1) — may not scan reliably</span>';
+  } else {
+    badgeHtml += '<span class="badge info">Contrast '+cr.toFixed(2)+':1</span>';
+  }
+  var mcNum = parseInt(meta.modules, 10) || 21;
+  var minCm = Math.max(2, Math.round(mcNum * 0.08 * 10) / 10);
+  badgeHtml += '<span class="badge info" title="Minimum recommended physical print size for reliable scanning at ~25 cm distance">🖨 min '+minCm+' cm print</span>';
+  $("#badgeRow").innerHTML = badgeHtml;
+}
+
+// Scan verification only needs to run when the *encoded* QR changes,
+// not on every style tweak — so it's driven from the encode cache path.
+function verifyIfNeeded(qr, key){
+  if(verifyCache.key === key) return;
+  verifyCache.key = key;
+  verifyScan(qr);
+}
+var verifyCache = { key:null };
+
+/* ---------- jsQR verification (optional, offline-safe) ---------- */
+function ensureJsQR(cb){
+  if(window.jsQR){ jsQRAvailable = true; cb(); return; }
+  if(window.__jsqrFailed){ cb(); return; }
+  var s = document.createElement("script");
+  s.src = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
+  s.onload = function(){ jsQRAvailable = !!window.jsQR; cb(); };
+  s.onerror = function(){ window.__jsqrFailed = true; jsQRAvailable = false; cb(); };
+  document.head.appendChild(s);
+}
+function verifyScan(qr){
+  ensureJsQR(function(){
+    if(!window.jsQR) return;
+    try{
+      var tmp = document.createElement("canvas");
+      drawQRToCanvas(tmp, qr, {scale:1, forceBg:true});
+      var ctx = tmp.getContext("2d");
+      var img = ctx.getImageData(0,0,tmp.width,tmp.height);
+      var result = window.jsQR(img.data, tmp.width, tmp.height);
+      var el = $("#badgeRow");
+      if(result && result.data){
+        el.innerHTML += '<span class="badge ok">✓ scans perfectly</span>';
+      } else {
+        el.innerHTML += '<span class="badge warn">⚠ verification could not confirm a scan — try higher ECC or less busy styling</span>';
+      }
+    }catch(e){ /* non-fatal */ }
+  });
+}
+
+/* ---------- render pipeline ---------- */
+// Cache the encoded QR model so that pure style changes (color, shape, size…)
+// don't re-run the (relatively expensive) QR encoding + mask-selection step.
+var encodeCache = { key:null, qr:null };
+function getQR(payload, ecc){
+  var key = payload + "|" + ecc;
+  if(encodeCache.key === key && encodeCache.qr) return encodeCache.qr;
+  var qr = QRVoltEncoder.encodeQR(payload, ecc);
+  encodeCache.key = key; encodeCache.qr = qr;
+  return qr;
+}
+function render(){
+  try{
+    var payload = buildPayload();
+    if(!payload){ payload = "https://example.com"; }
+    var qr = getQR(payload, state.ecc);
+    var key = payload + "|" + state.ecc;
+    currentQR = qr;
+    var canvas = $("#qrCanvas");
+    drawQRToCanvas(canvas, qr, {scale:1});
+    updateMeta(qr, payload);
+    verifyIfNeeded(qr, key);
+  }catch(e){
+    showToast("Render error: " + e.message, "err");
+  }
+}
+function scheduleRender(){
+  clearTimeout(renderDebounce);
+  renderDebounce = setTimeout(render, 140);
+}
+$all("#urlInput,#textInput,#wifiSsid,#wifiEnc,#wifiPass,#wifiHidden,#emailTo,#emailSubject,#emailBody,#vName,#vOrg,#vPhone,#vEmail,#vUrl,#smsPhone,#smsBody,#phoneNum,#geoLat,#geoLng,#geoQ,#evTitle,#evStart,#evEnd,#evLoc,#evDesc,#waPhone,#waMsg,#ppUser,#ppAmount,#ppCur,#crCoin,#crAddr,#crAmount,#pdfUrl,#appId,#captionText").forEach(function(el){
+  el.addEventListener("input", scheduleRender);
+  el.addEventListener("change", scheduleRender);
+});
+
+/* app store label */
+$("#appPlat").addEventListener("change", function(){
+  $("#appIdLabel").textContent = (this.value==="google") ? "Package name (e.g. com.example.app)" :
+    (this.value==="apple") ? "App Store numeric ID (e.g. 123456789)" : "Direct link to the app";
+  scheduleRender();
+});
+
+/* ---------- batch / bulk QR (Multi-URL & Social) ---------- */
+function renderBulk(textareaId, gridId){
+  var lines = ($("#"+textareaId).value || "").split("\n").map(function(l){ return l.trim(); }).filter(Boolean);
+  var grid = $("#"+gridId);
+  grid.innerHTML = "";
+  grid.__qrList = [];
+  if(!lines.length){ grid.innerHTML = '<div class="hist-empty">Add at least one link above.</div>'; return; }
+  var prevSize = state.size;
+  lines.forEach(function(line, idx){
+    var url = /^https?:\/\//i.test(line) ? line : "https://" + line.replace(/^\/+/, "");
+    var qr;
+    try { qr = QRVoltEncoder.encodeQR(url, "M"); }
+    catch(e){ return; }
+    state.size = 180;
+    var c = document.createElement("canvas");
+    drawQRToCanvas(c, qr, {scale:1, forceBg:true});
+    state.size = prevSize;
+    grid.__qrList.push({ name: "qrvolt-"+String(idx+1).padStart(2,"0")+".png", canvas: c });
+    var cell = document.createElement("div");
+    cell.className = "hist-item";
+    var cap = document.createElement("div");
+    cap.className = "hist-cap";
+    cap.textContent = line;
+    cell.appendChild(c);
+    cell.appendChild(cap);
+    var dl = document.createElement("button");
+    dl.className = "del"; dl.title = "Download PNG"; dl.textContent = "⬇";
+    dl.addEventListener("click", function(e){ e.stopPropagation(); var a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = "qrvolt-"+(idx+1)+".png"; a.click(); });
+    cell.appendChild(dl);
+    grid.appendChild(cell);
+  });
+}
+$("#multiGen").addEventListener("click", function(){ renderBulk("multiUrls", "multiGrid"); });
+$("#socialGen").addEventListener("click", function(){ renderBulk("socialUrls", "socialGrid"); });
+
+/* ---------- ZIP export for batches (store-only, no deps) ---------- */
+function crc32(buf){
+  if(!crc32.table){
+    crc32.table = [];
+    for(var n=0;n<256;n++){ var c=n; for(var k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); crc32.table[n] = c>>>0; }
+  }
+  var c = 0xFFFFFFFF;
+  for(var i=0;i<buf.length;i++) c = crc32.table[(c ^ buf[i]) & 0xFF] ^ (c>>>8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function makeZip(entries){
+  var enc = new TextEncoder();
+  var chunks = [], central = [], offset = 0;
+  entries.forEach(function(e){
+    var nameB = enc.encode(e.name);
+    var crc = crc32(e.bytes);
+    var h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true);
+    h.setUint16(4, 20, true);
+    h.setUint16(8, 0, true);
+    h.setUint32(14, crc, true);
+    h.setUint32(18, e.bytes.length, true);
+    h.setUint32(22, e.bytes.length, true);
+    h.setUint16(26, nameB.length, true);
+    chunks.push(new Uint8Array(h.buffer), nameB, e.bytes);
+    central.push({ name:nameB, crc:crc, size:e.bytes.length, off:offset });
+    offset += 30 + nameB.length + e.bytes.length;
+  });
+  var cdStart = offset, cdSize = 0;
+  central.forEach(function(cd){
+    var h = new DataView(new ArrayBuffer(46));
+    h.setUint32(0, 0x02014b50, true);
+    h.setUint16(4, 20, true); h.setUint16(6, 20, true);
+    h.setUint32(16, cd.crc, true);
+    h.setUint32(20, cd.size, true); h.setUint32(24, cd.size, true);
+    h.setUint16(28, cd.name.length, true);
+    h.setUint32(42, cd.off, true);
+    chunks.push(new Uint8Array(h.buffer), cd.name);
+    cdSize += 46 + cd.name.length;
+  });
+  var end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, central.length, true);
+  end.setUint16(10, central.length, true);
+  end.setUint32(12, cdSize, true);
+  end.setUint32(16, cdStart, true);
+  chunks.push(new Uint8Array(end.buffer));
+  return new Blob(chunks, { type:"application/zip" });
+}
+function downloadGridZip(gridId){
+  var list = $("#"+gridId).__qrList || [];
+  if(!list.length){ showToast("Generate the batch first.", "err"); return; }
+  var jobs = list.map(function(item){
+    return new Promise(function(res){
+      item.canvas.toBlob(function(b){ b.arrayBuffer().then(function(ab){ res({ name:item.name, bytes:new Uint8Array(ab) }); }); }, "image/png");
+    });
+  });
+  Promise.all(jobs).then(function(entries){
+    var blob = makeZip(entries);
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "qrvolt-batch.zip";
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+    showToast("ZIP downloaded — "+entries.length+" QR codes", "ok");
+  }).catch(function(err){ showToast("ZIP failed: "+err.message, "err"); });
+}
+$("#multiZip").addEventListener("click", function(){ downloadGridZip("multiGrid"); });
+$("#socialZip").addEventListener("click", function(){ downloadGridZip("socialGrid"); });
+$all(".tab-panel[data-panel='social'] .chip").forEach(function(ch){
+  ch.addEventListener("click", function(){
+    var base = ch.dataset.soc;
+    var ta = $("#socialUrls");
+    ta.value = (ta.value ? ta.value.replace(/\s*$/,"") + "\n" : "") + base + "";
+    ta.focus();
+  });
+});
+
+/* ---------- export: PNG ---------- */
+$("#downloadPng").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var scale = parseInt(state.pngScale,10);
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:scale});
+    tmp.toBlob(function(blob){
+      if(!blob){ showToast("PNG export failed: canvas produced no data", "err"); return; }
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qrvolt-"+Date.now()+".png";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+      showToast("PNG downloaded", "ok");
+    }, "image/png");
+  }catch(e){ showToast("PNG export failed: "+e.message, "err"); }
+});
+
+/* ---------- export: JPG (always opaque background) ---------- */
+$("#downloadJpg").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var scale = parseInt(state.pngScale,10);
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:scale, forceBg:true});
+    tmp.toBlob(function(blob){
+      if(!blob){ showToast("JPG export failed: canvas produced no data", "err"); return; }
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qrvolt-"+Date.now()+".jpg";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+      showToast("JPG downloaded", "ok");
+    }, "image/jpeg", 0.92);
+  }catch(e){ showToast("JPG export failed: "+e.message, "err"); }
+});
+
+/* ---------- export: WebP ---------- */
+$("#downloadWebp").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var scale = parseInt(state.pngScale,10);
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:scale});
+    tmp.toBlob(function(blob){
+      if(!blob){ showToast("WebP not supported by this browser — use PNG instead.", "err"); return; }
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "qrvolt-"+Date.now()+".webp";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+      showToast("WebP downloaded", "ok");
+    }, "image/webp");
+  }catch(e){ showToast("WebP export failed: "+e.message, "err"); }
+});
+
+/* ---------- export: PDF (self-contained, no external library) ---------- */
+async function deflateBytes(bytes){
+  var cs = new CompressionStream('deflate');
+  var writer = cs.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+  var buf = await new Response(cs.readable).arrayBuffer();
+  return new Uint8Array(buf);
+}
+async function makePdf(canvas){
+  var w = canvas.width, h = canvas.height;
+  var ctx = canvas.getContext('2d');
+  var id = ctx.getImageData(0,0,w,h);
+  var rgb = new Uint8Array(w*h*3);
+  for(var i=0,p=0;i<id.data.length;i+=4){ rgb[p++]=id.data[i]; rgb[p++]=id.data[i+1]; rgb[p++]=id.data[i+2]; }
+  var comp = await deflateBytes(rgb);
+  var s = Math.min(1, 720/Math.max(w,h));
+  var W = Math.round(w*s), H = Math.round(h*s);
+  var objs = [];
+  objs[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+  objs[2] = "<< /Type /Pages /Kids [3 0 R] /Count 1 >>";
+  objs[3] = "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>";
+  objs[4] = "<< /Type /XObject /Subtype /Image /Width "+w+" /Height "+h+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length "+comp.length+" >>";
+  var content = "q\n"+W+" 0 0 "+H+" 0 0 cm\n/Im0 Do\nQ\n";
+  objs[5] = "<< /Length "+content.length+" >>";
+  var header = "%PDF-1.4\n";
+  var parts = [header];
+  var offsets = [];
+  var pos = header.length;
+  for(var n=1;n<=5;n++){
+    offsets[n] = pos;
+    if(n===4){
+      var h4 = n+" 0 obj\n"+objs[n]+"\nstream\n";
+      parts.push(h4); pos += h4.length;
+      parts.push(comp); pos += comp.length;
+      var t4 = "\nendstream\nendobj\n";
+      parts.push(t4); pos += t4.length;
+    } else if(n===5){
+      var h5 = n+" 0 obj\n"+objs[n]+"\nstream\n";
+      parts.push(h5); pos += h5.length;
+      parts.push(content); pos += content.length;
+      var t5 = "endstream\nendobj\n";
+      parts.push(t5); pos += t5.length;
+    } else {
+      var s2 = n+" 0 obj\n"+objs[n]+"\nendobj\n";
+      parts.push(s2); pos += s2.length;
+    }
+  }
+  var xrefStart = pos;
+  var xref = "xref\n0 6\n0000000000 65535 f \n";
+  for(var m=1;m<=5;m++){ xref += ("0000000000"+offsets[m]).slice(-10) + " 00000 n \n"; }
+  xref += "trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n"+xrefStart+"\n%%EOF";
+  parts.push(xref);
+  return new Blob(parts, {type:"application/pdf"});
+}
+$("#downloadPdf").addEventListener("click", async function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:4, forceBg:true});
+    showToast("Generating PDF…", "info");
+    var blob = await makePdf(tmp);
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "qrvolt-"+Date.now()+".pdf";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+    showToast("PDF downloaded", "ok");
+  }catch(e){ showToast("PDF export failed: "+e.message, "err"); }
+});
+
+/* ---------- scan & read QR ---------- */
+function decodeCanvasQR(c){
+  if(!window.jsQR) return null;
+  var ctx = c.getContext("2d");
+  var img = ctx.getImageData(0,0,c.width,c.height);
+  return window.jsQR(img.data, c.width, c.height);
+}
+function showScanResult(res){
+  var el = $("#scanResult");
+  if(!res || !res.data){ el.innerHTML = '<div class="badge warn">⚠ No QR code found</div>'; return; }
+  var data = res.data;
+  var isUrl = /^https?:\/\//i.test(data);
+  var html = '<div class="scan-box">'+ escapeHtml(data) +'</div><div class="btn-row">';
+  html += '<button class="btn small" id="scanCopy">⧉ Copy</button>';
+  if(isUrl) html += '<a class="btn small primary" href="'+encodeURI(data)+'" target="_blank" rel="noopener">↗ Open link</a>';
+  html += '<button class="btn small" id="scanEdit">✎ Edit in generator</button></div>';
+  el.innerHTML = html;
+  $("#scanCopy").addEventListener("click", function(){
+    if(navigator.clipboard){ navigator.clipboard.writeText(data).then(function(){ showToast("Copied","ok"); }, function(){ showToast("Copy failed","err"); }); }
+    else { showToast("Clipboard unavailable","err"); }
+  });
+  $("#scanEdit").addEventListener("click", function(){
+    $all("#contentTabs .tab-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.tab==="url"); });
+    $all(".tab-panel").forEach(function(p){ p.classList.toggle("active", p.dataset.panel==="url"); });
+    $("#urlInput").value = data;
+    scheduleRender();
+    showToast("Loaded into generator","ok");
+  });
+}
+function handleScanFile(file){
+  var reader = new FileReader();
+  reader.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var c = document.createElement("canvas");
+      var scale = Math.min(1, 1400/Math.max(img.width, img.height));
+      c.width = Math.max(1, Math.round(img.width*scale));
+      c.height = Math.max(1, Math.round(img.height*scale));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      ensureJsQR(function(){
+        if(!window.jsQR){ showScanResult(null); return; }
+        showScanResult(decodeCanvasQR(c));
+      });
+    };
+    img.onerror = function(){ showToast("Couldn't load that image.","err"); };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+$("#scanDrop").addEventListener("click", function(){ $("#scanFile").click(); });
+$("#scanFile").addEventListener("change", function(e){ if(e.target.files[0]) handleScanFile(e.target.files[0]); });
+$("#scanDrop").addEventListener("dragover", function(e){ e.preventDefault(); });
+$("#scanDrop").addEventListener("drop", function(e){ e.preventDefault(); if(e.dataTransfer.files[0]) handleScanFile(e.dataTransfer.files[0]); });
+
+var scanStream = null, scanRAF = null;
+function stopScan(){
+  if(scanRAF) cancelAnimationFrame(scanRAF);
+  if(scanStream){ scanStream.getTracks().forEach(function(t){ t.stop(); }); scanStream = null; }
+  $("#scanVideo").style.display = "none";
+  $("#scanCameraBtn").style.display = "inline-block";
+  $("#scanStopBtn").style.display = "none";
+}
+function scanLoop(){
+  var v = $("#scanVideo");
+  if(!scanStream) return;
+  if(v.readyState >= 2 && v.videoWidth){
+    var c = document.createElement("canvas");
+    c.width = v.videoWidth; c.height = v.videoHeight;
+    c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+    var res = decodeCanvasQR(c);
+    if(res && res.data){ stopScan(); showScanResult(res); return; }
+  }
+  scanRAF = requestAnimationFrame(scanLoop);
+}
+$("#scanCameraBtn").addEventListener("click", function(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ showToast("Camera not supported on this device/browser.","err"); return; }
+  ensureJsQR(function(){
+    if(!window.jsQR){ showToast("Scanner library unavailable.","err"); return; }
+    navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(function(stream){
+      scanStream = stream;
+      var v = $("#scanVideo");
+      v.srcObject = stream; v.style.display = "block"; v.play();
+      $("#scanCameraBtn").style.display = "none";
+      $("#scanStopBtn").style.display = "inline-block";
+      scanLoop();
+    }).catch(function(){ showToast("Camera permission denied.","err"); });
+  });
+});
+$("#scanStopBtn").addEventListener("click", stopScan);
+
+/* ---------- print ---------- */
+$("#printBtn").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:2, forceBg:true});
+    var w = window.open("", "_blank");
+    if(!w){ showToast("Pop-up blocked — please allow pop-ups to print.", "err"); return; }
+    w.document.write('<html><head><title>QRVolt Print</title></head><body style="margin:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#fff;">' +
+      '<img src="'+tmp.toDataURL("image/png")+'" style="max-width:90vmin;max-height:90vmin;"></body></html>');
+    w.document.close();
+    w.focus();
+    setTimeout(function(){ w.print(); }, 300);
+    showToast("Print opened", "ok");
+  }catch(e){ showToast("Print failed: "+e.message, "err"); }
+});
+
+/* ---------- export: SVG ---------- */
+$("#downloadSvg").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to export yet — waiting for QR to render.", "err"); return; }
+    var svg = buildSvg(currentQR);
+    var blob = new Blob([svg], {type:"image/svg+xml"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "qrvolt-"+Date.now()+".svg";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000);
+    showToast("SVG downloaded", "ok");
+  }catch(e){ showToast("SVG export failed: "+e.message, "err"); }
+});
+
+/* ---------- copy to clipboard ---------- */
+$("#copyBtn").addEventListener("click", function(){
+  try{
+    if(!currentQR){ showToast("Nothing to copy yet — waiting for QR to render.", "err"); return; }
+    var tmp = document.createElement("canvas");
+    drawQRToCanvas(tmp, currentQR, {scale:1, forceBg:true});
+    tmp.toBlob(function(blob){
+      if(navigator.clipboard && window.ClipboardItem){
+        navigator.clipboard.write([new ClipboardItem({"image/png": blob})]).then(function(){
+          showToast("Copied to clipboard", "ok");
+        }).catch(function(){ fallbackCopy(tmp); });
+      } else { fallbackCopy(tmp); }
+    });
+  }catch(e){ showToast("Copy failed: "+e.message, "err"); }
+});
+function fallbackCopy(canvas){
+  var a = document.createElement("a");
+  a.href = canvas.toDataURL("image/png");
+  a.download = "qrvolt-"+Date.now()+".png";
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showToast("Clipboard unavailable — downloaded PNG instead", "info");
+}
+
+/* ---------- state serialization (used by reset) ---------- */
+function serializeState(){
+  return {
+    activeTab: state.activeTab,
+    fields: {
+      urlInput: $("#urlInput").value, textInput: $("#textInput").value,
+      wifiSsid: $("#wifiSsid").value, wifiEnc: $("#wifiEnc").value, wifiPass: $("#wifiPass").value, wifiHidden: $("#wifiHidden").checked,
+      emailTo: $("#emailTo").value, emailSubject: $("#emailSubject").value, emailBody: $("#emailBody").value,
+      vName: $("#vName").value, vOrg: $("#vOrg").value, vPhone: $("#vPhone").value, vEmail: $("#vEmail").value, vUrl: $("#vUrl").value,
+      smsPhone: $("#smsPhone").value, smsBody: $("#smsBody").value, phoneNum: $("#phoneNum").value,
+      geoLat: $("#geoLat").value, geoLng: $("#geoLng").value, geoQ: $("#geoQ").value,
+      evTitle: $("#evTitle").value, evStart: $("#evStart").value, evEnd: $("#evEnd").value, evLoc: $("#evLoc").value, evDesc: $("#evDesc").value,
+      waPhone: $("#waPhone").value, waMsg: $("#waMsg").value,
+      ppUser: $("#ppUser").value, ppAmount: $("#ppAmount").value, ppCur: $("#ppCur").value,
+      crCoin: $("#crCoin").value, crAddr: $("#crAddr").value, crAmount: $("#crAmount").value,
+      pdfUrl: $("#pdfUrl").value, appPlat: $("#appPlat").value, appId: $("#appId").value,
+      multiUrls: $("#multiUrls").value, socialUrls: $("#socialUrls").value,
+      captionText: $("#captionText").value, captionPos: $("#captionPos").value
+    },
+    design: JSON.parse(JSON.stringify(state, function(k,v){ return k==="logoImage" ? undefined : v; }))
+  };
+}
+function restoreState(saved){
+  state.activeTab = saved.activeTab;
+  var f = saved.fields;
+  $("#urlInput").value=f.urlInput||""; $("#textInput").value=f.textInput||"";
+  $("#wifiSsid").value=f.wifiSsid||""; $("#wifiEnc").value=f.wifiEnc||"WPA"; $("#wifiPass").value=f.wifiPass||""; $("#wifiHidden").checked=!!f.wifiHidden;
+  $("#emailTo").value=f.emailTo||""; $("#emailSubject").value=f.emailSubject||""; $("#emailBody").value=f.emailBody||"";
+  $("#vName").value=f.vName||""; $("#vOrg").value=f.vOrg||""; $("#vPhone").value=f.vPhone||""; $("#vEmail").value=f.vEmail||""; $("#vUrl").value=f.vUrl||"";
+  $("#smsPhone").value=f.smsPhone||""; $("#smsBody").value=f.smsBody||""; $("#phoneNum").value=f.phoneNum||"";
+  $("#geoLat").value=f.geoLat||""; $("#geoLng").value=f.geoLng||""; $("#geoQ").value=f.geoQ||"";
+  $("#evTitle").value=f.evTitle||""; $("#evStart").value=f.evStart||""; $("#evEnd").value=f.evEnd||""; $("#evLoc").value=f.evLoc||""; $("#evDesc").value=f.evDesc||"";
+  $("#waPhone").value=f.waPhone||""; $("#waMsg").value=f.waMsg||"";
+  $("#ppUser").value=f.ppUser||""; $("#ppAmount").value=f.ppAmount||""; $("#ppCur").value=f.ppCur||"";
+  $("#crCoin").value=f.crCoin||"bitcoin"; $("#crAddr").value=f.crAddr||""; $("#crAmount").value=f.crAmount||"";
+  $("#pdfUrl").value=f.pdfUrl||""; $("#appPlat").value=f.appPlat||"google"; $("#appId").value=f.appId||"";
+  $("#multiUrls").value=f.multiUrls||""; $("#socialUrls").value=f.socialUrls||"";
+  $("#captionText").value=f.captionText||""; $("#captionPos").value=f.captionPos||"none";
+
+  Object.assign(state, saved.design);
+  state.logoImage = null; // custom logo image object can't be restored from JSON; user can re-upload
+  $all("#contentTabs .tab-btn").forEach(function(b){ b.classList.toggle("active", b.dataset.tab===state.activeTab); });
+  $all(".tab-panel").forEach(function(p){ p.classList.toggle("active", p.dataset.panel===state.activeTab); });
+  $("#colorA").value=state.colorA; $("#colorAHex").value=state.colorA;
+  $("#bgColor").value=state.bgColor; $("#bgColorHex").value=state.bgColor;
+  $("#gradientToggle").checked=state.useGradient; $("#gradientRow").style.display = state.useGradient?"block":"none";
+  $("#colorA2").value=state.colorA2; $("#colorM").value=state.colorM; $("#colorB2").value=state.colorB2;
+  $("#gradientType").value=state.gradientType; $("#gradientAngle").value=state.gradientAngle; $("#gradientAngleVal").textContent=state.gradientAngle+"°";
+  $("#gradientAngleWrap").style.display = state.gradientType==="radial" ? "none" : "block";
+  $("#transparentBg").checked=state.transparentBg;
+  $("#eyeOuterColor").value=state.eyeOuterColor; $("#eyeInnerColor").value=state.eyeInnerColor;
+  setSegActive("#moduleStyleSeg", state.moduleStyle);
+  setSegActive("#eyeStyleSeg", state.eyeStyle);
+  $("#sizeSlider").value=state.size; $("#sizeVal").textContent=state.size+"px";
+  $("#quietZoneSlider").value=state.quietZone; $("#quietZoneVal").textContent=state.quietZone+" modules";
+  setSegActive("#eccSeg", state.ecc);
+  setSegActive("#pngScaleSeg", state.pngScale);
+  var pos = state.brandTop ? "top" : (state.logoEnable ? "center" : "none");
+  state.logoPos = pos;
+  setSegActive("#logoPosSeg", pos);
+  $("#logoControls").style.display = (pos === "none") ? "none" : "block";
+  setSegActive("#logoSourceSeg", state.logoSource);
+  $("#logoUploadRow").style.display = state.logoSource==="custom" ? "block":"none";
+  $("#logoSize").value=state.logoSize; $("#logoSizeVal").textContent=state.logoSize+"%";
+  $("#logoPlate").checked=state.logoPlate;
+  $("#captionSize").value=state.captionSize; $("#captionSizeVal").textContent=state.captionSize+"%";
+  $("#captionStyle").value = state.captionStyle || "plain";
+  scheduleRender();
+}
+
+/* ---------- reset everything to defaults ---------- */
+function defaultSaved(){
+  return {
+    activeTab:"url",
+    fields:{
+      urlInput:"qrvolt.online", textInput:"Hello from QRVolt ⚡",
+      wifiSsid:"", wifiEnc:"WPA", wifiPass:"", wifiHidden:false,
+      emailTo:"", emailSubject:"", emailBody:"",
+      vName:"", vOrg:"", vPhone:"", vEmail:"", vUrl:"",
+      smsPhone:"", smsBody:"", phoneNum:"", geoLat:"", geoLng:"", geoQ:"",
+      evTitle:"", evStart:"", evEnd:"", evLoc:"", evDesc:"",
+      waPhone:"", waMsg:"", ppUser:"", ppAmount:"", ppCur:"",
+      crCoin:"bitcoin", crAddr:"", crAmount:"",
+      pdfUrl:"", appPlat:"google", appId:"", multiUrls:"", socialUrls:"",
+      captionText:"", captionPos:"none"
+    },
+    design:{
+      colorA:"#111111", bgColor:"#ffffff", useGradient:false,
+      colorA2:"#8b5cf6", colorM:"#ec4899", colorB2:"#22d3ee",
+      gradientType:"linear", gradientAngle:45, transparentBg:false,
+      moduleStyle:"square", eyeStyle:"square",
+      eyeOuterColor:"#111111", eyeInnerColor:"#111111",
+      size:512, quietZone:4, ecc:"H",
+      logoEnable:false, logoSource:"volt", logoSize:24, logoPlate:true, pngScale:1,
+      caption:"", captionPos:"none", captionSize:9, captionStyle:"plain", brandTop:false, logoPos:"none"
+    }
+  };
+}
+$("#resetAllBtn").addEventListener("click", function(){
+  try{
+    restoreState(defaultSaved());
+    state.logoImage = null;
+    state.logoImageDataUrl = null;
+    $("#logoPreviewWrap").style.display = "none";
+    if($("#logoFile")) $("#logoFile").value = "";
+    encodeCache.key = null; encodeCache.qr = null;
+    verifyCache.key = null;
+    showToast("Reset to defaults", "ok");
+  }catch(e){ showToast("Reset failed: " + e.message, "err"); }
+});
+
+/* ---------- self test on load ---------- */
+function selfTest(){
+  try{
+    var test = "QRVolt self-test " + Date.now();
+    var qr = QRVoltEncoder.encodeQR(test, "M");
+    var tmp = document.createElement("canvas");
+    var savedSize = state.size; state.size = 256;
+    drawQRToCanvas(tmp, qr, {scale:1, forceBg:true});
+    state.size = savedSize;
+    showToast("Self-test: encoder OK ✓ (v"+qr.typeNumber+")", "ok");
+    ensureJsQR(function(){
+      if(!window.jsQR){ showToast("Offline: scan verification unavailable (jsQR not loaded)", "info"); return; }
+      try{
+        var ctx = tmp.getContext("2d");
+        var img = ctx.getImageData(0,0,tmp.width,tmp.height);
+        var result = window.jsQR(img.data, tmp.width, tmp.height);
+        if(result && result.data === test) showToast("Self-test: decode round-trip OK ✓", "ok");
+        else showToast("Self-test: decode mismatch (non-fatal)", "info");
+      }catch(e){ /* non-fatal */ }
+    });
+  }catch(e){
+    showToast("Self-test failed: " + e.message, "err");
+  }
+}
+
+/* ---------- share design via link (everything encoded in the URL) ---------- */
+function b64e(s){ return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function b64d(s){ s = s.replace(/-/g,"+").replace(/_/g,"/"); while(s.length % 4) s += "="; return decodeURIComponent(escape(atob(s))); }
+$("#shareBtn").addEventListener("click", function(){
+  try{
+    var url = location.origin + location.pathname + "#d=" + b64e(JSON.stringify(serializeState()));
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ showToast("Share link copied ✓", "ok"); },
+        function(){ prompt2(url); });
+    } else prompt2(url);
+    function prompt2(u){ var p = prompt("Copy this share link:", u); if(p!==null) showToast(p ? "Link ready — paste it anywhere" : "Share cancelled", p ? "ok" : "info"); }
+  }catch(e){ showToast("Share failed: "+e.message, "err"); }
+});
+
+/* ---------- init ---------- */
+// restore a shared design from the URL before first render (#d=...)
+(function(){
+  var m = location.hash.match(/^#d=(.+)$/);
+  if(!m) return;
+  try{
+    restoreState(JSON.parse(b64d(m[1])));
+    showToast("Design loaded from shared link ✓", "ok");
+  }catch(e){ /* malformed hash — ignore */ }
+})();
+render();
+selfTest();
+
+/* ---------- keyboard shortcut: Ctrl/Cmd+S downloads PNG ---------- */
+document.addEventListener("keydown", function(e){
+  if((e.ctrlKey || e.metaKey) && String(e.key).toLowerCase() === "s"){ e.preventDefault(); $("#downloadPng").click(); }
+});
+
+/* ---------- PWA service worker (true offline install) ---------- */
+try{
+  if("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")){
+    navigator.serviceWorker.register("sw.js").catch(function(){});
+  }
+}catch(e){}
+
+})();
+</script>
+</body>
+</html>
